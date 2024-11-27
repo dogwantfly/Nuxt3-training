@@ -1,5 +1,5 @@
 <template>
   <div>
-    <h1>首頁</h1>
+    <h1>房間</h1>
   </div>
 </template>

@@ -9,6 +9,7 @@ authStore.initialize();
   <div>
     <NuxtRouteAnnouncer />
     <!-- <NuxtWelcome /> -->
+    <AppHeader />
     <NuxtPage />
   </div>
 </template>
