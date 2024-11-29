@@ -1,11 +1,11 @@
 <script setup>
 definePageMeta({
-  middleware: 'auth',
-});
+  layout: 'user'
+})
 </script>
 
 <template>
   <div>
-    <h1>Reservation</h1>
+    <h1>會員中心</h1>
   </div>
 </template>

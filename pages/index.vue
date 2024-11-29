@@ -923,12 +923,4 @@ section .btn {
   opacity: 1;
 }
 
-swiper-container >>> .swiper-pagination-bullet-active {
-  width: 60px;
-  background-color: #BF9D7D;
-}
-:host {
-  --swiper-theme-color: #BF9D7D;
-}
-
 </style>

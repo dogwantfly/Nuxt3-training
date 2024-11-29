@@ -478,7 +478,7 @@ const handleDateChange = (bookingInfo) => {
 
               <h5 class="mb-0 text-primary-100 fw-bold">NT$ 10,000</h5>
               <NuxtLink
-                :to="`/reservation/${$route.params.roomId}`"
+                :to="`/rooms/${$route.params.id}/booking`"
                 class="btn btn-primary-100 py-4 text-neutral-0 fw-bold rounded-3"
               >
                 立即預訂
