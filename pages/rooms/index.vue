@@ -179,7 +179,7 @@ const swiperStyles = {
                   >
                     <p class="mb-0 fw-bold">NT$ 10,000</p>
                     <NuxtLink
-                      :to="`/rooms/a`"
+                      to="/rooms/a"
                       class="icon-link icon-link-hover text-primary-100"
                     >
                       <Icon class="bi fs-5" icon="mdi:arrow-right" />
@@ -273,7 +273,7 @@ const swiperStyles = {
                   >
                     <p class="mb-0 fw-bold">NT$ 10,000</p>
                     <NuxtLink
-                      :to="`/rooms/b`"
+                      to="/rooms/b"
                       class="icon-link icon-link-hover text-primary-100"
                     >
                       <Icon class="bi fs-5" icon="mdi:arrow-right" />
@@ -367,7 +367,7 @@ const swiperStyles = {
                   >
                     <p class="mb-0 fw-bold">NT$ 10,000</p>
                     <NuxtLink
-                      :to="`/rooms/c`"
+                      to="/rooms/c"
                       class="icon-link icon-link-hover text-primary-100"
                     >
                       <Icon class="bi fs-5" icon="mdi:arrow-right" />
@@ -461,7 +461,7 @@ const swiperStyles = {
                   >
                     <p class="mb-0 fw-bold">NT$ 10,000</p>
                     <NuxtLink
-                      :to="`/rooms/d`"
+                      to="/rooms/d"
                       class="icon-link icon-link-hover text-primary-100"
                     >
                       <Icon class="bi fs-5" icon="mdi:arrow-right" />

@@ -505,19 +505,19 @@ const handleDateChange = (bookingInfo) => {
         <template v-else>
           <div class="d-flex flex-column gap-1">
             <small class="text-neutral-80 fw-medium"
-              >ＮＴ$ 10,000 / {{ daysCount }} 晚 / {{ bookingPeople }} 人</small
+              >NT$ 10,000 / {{ daysCount }} 晚 / {{ bookingPeople }} 人</small
             >
             <span class="text-neutral fs-9 fw-medium text-decoration-underline"
               >{{ daysFormatOnMobile(bookingDate.date?.start) }} -
               {{ daysFormatOnMobile(bookingDate.date?.end) }}</span
             >
           </div>
-          <RouterLink
-            :to="{ name: 'booking', params: { roomId: $route.params.roomId } }"
+          <NuxtLink
+            :to="`/reservation/${$route.params.roomId}`"
             class="btn btn-primary-100 px-12 py-4 text-neutral-0 fw-bold rounded-3"
           >
             立即預訂
-          </RouterLink>
+          </NuxtLink>
         </template>
       </div>
     </section>

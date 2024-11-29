@@ -45,6 +45,9 @@ importers:
       '@iconify/vue':
         specifier: ^4.1.2
         version: 4.1.2(vue@3.5.13(typescript@5.6.3))
+      '@samk-dev/nuxt-vcalendar':
+        specifier: ^1.0.4
+        version: 1.0.4(magicast@0.3.5)(rollup@4.27.4)(vue@3.5.13(typescript@5.6.3))
       sass:
         specifier: ^1.7.3
         version: 1.7.3
@@ -870,6 +873,9 @@ packages:
     resolution: {integrity: sha512-3j4jx1TppORdTAoBJRd+/wJRGCPC0ETWkXOecJ6PPZLj6SptXkrXcNqdj0oclbKML6FkQltdz7bBA3rUSirZug==}
     cpu: [x64]
     os: [win32]
+
+  '@samk-dev/nuxt-vcalendar@1.0.4':
+    resolution: {integrity: sha512-vl2VzELpqSheJmuG1ZehggieEb2E8YRkw+DDVl2UrLBj6z1ll3CHL0Kjrjg5Bg1UylmQO3yBdpTyjESP/tSj/Q==}
 
   '@sindresorhus/merge-streams@2.3.0':
     resolution: {integrity: sha512-LtoMMhxAlorcGhmFYI+LhPgbPZCkgP6ra1YL604EeF6U98pLlQ3iWIGMdWSC+vWmPBWBNgmDBAhnAobLROJmwg==}
@@ -4596,6 +4602,17 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.27.4':
     optional: true
+
+  '@samk-dev/nuxt-vcalendar@1.0.4(magicast@0.3.5)(rollup@4.27.4)(vue@3.5.13(typescript@5.6.3))':
+    dependencies:
+      '@nuxt/kit': 3.14.1592(magicast@0.3.5)(rollup@4.27.4)
+      '@popperjs/core': 2.11.8
+      v-calendar: 3.1.2(@popperjs/core@2.11.8)(vue@3.5.13(typescript@5.6.3))
+    transitivePeerDependencies:
+      - magicast
+      - rollup
+      - supports-color
+      - vue
 
   '@sindresorhus/merge-streams@2.3.0': {}
 

@@ -1,11 +1,21 @@
 <script setup>
-import { useBreakpoints, bootstrapBreakpoints } from '@vueuse/core';
+import { useBreakpoints } from '@vueuse/core';
 
 const { $bootstrap } = useNuxtApp();
 const modal = ref(null);
 
 onMounted(() => {
-  modal.value = new $bootstrap.Modal(document.getElementById('dateModal'));
+  const modalElement = document.getElementById('dateModal');
+  if (modalElement) {
+    modal.value = $bootstrap.Modal(modalElement);
+  } else {
+    console.warn("Modal element not found");
+  }
+
+  rows.value = isMd.value ? 1 : 2;
+  columns.value = isMd.value ? 2 : 1;
+  expanded.value = !isMd.value;
+  titlePosition.value = isMd.value ? 'center' : 'left';
 });
 
 const openModal = () => {
@@ -45,14 +55,28 @@ const masks = {
   modelValue: 'YYYY-MM-DD',
 };
 
-const { md } = useBreakpoints(bootstrapBreakpoints);
+const bootstrapBreakpoints = {
+  xs: 0,
+  sm: 576,
+  md: 768,
+  lg: 992,
+  xl: 1200,
+  xxl: 1400,
+  xxxl: 1537,
+}
 
-const rows = md.value ? 1 : 2;
-const columns = md.value ? 2 : 1;
-const expanded = md.value ? false : true;
-const titlePosition = md.value ? 'center' : 'left';
+  const { md } = useBreakpoints(bootstrapBreakpoints);
 
-const formatDateTitle = (date) => date?.replaceAll('-', ' / ');
+const isMd = computed(() => md.value ?? true); // md.value 是響應式值
+
+const rows = ref(1); // 默認值
+const columns = ref(2); // 默認值
+const expanded = ref(false);
+const titlePosition = ref('center');
+
+
+
+const formatDateTitle = (date) => date?.replace(/-/g, ' / ');
 
 const daysCount = computed(() => {
   const startDate = tempDate.date.start;
@@ -99,8 +123,10 @@ const confirmDate = () => {
 const clearDate = () => {
   tempDate.date.start = null;
   tempDate.date.end = null;
-  tempDate.key++;
 };
+
+
+
 </script>
 
 <template>
@@ -188,7 +214,7 @@ const clearDate = () => {
         </div>
         <div class="modal-body px-6 px-md-8 py-0">
           <div v-if="!isConfirmDateOnMobile" class="date-picker">
-            <DatePicker
+            <VDatePicker
               :key="tempDate.key"
               v-model.range.string="tempDate.date"
               color="primary"

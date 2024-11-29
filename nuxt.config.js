@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ['nuxt-swiper'],
+  modules: ['nuxt-swiper','@samk-dev/nuxt-vcalendar'],
   plugins: ['~/plugins/axios.js'],
   compatibilityDate: '2024-11-27',
   css: [
