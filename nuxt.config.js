@@ -29,4 +29,9 @@ export default defineNuxtConfig({
     styleLang: 'css', 
     modules: ['autoplay', 'navigation', 'pagination'],
   },
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.API_BASE_URL,
+    },
+  },
 });

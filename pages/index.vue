@@ -2,8 +2,12 @@
 const roomSwiperRef = ref(null);
 const slides = ref(Array.from({ length: 5 }))
 
+const { $apiClient } = useNuxtApp();
 
 const roomSwiper = useSwiper(roomSwiperRef);
+const response = await $apiClient.get('/api/v1/home/news/');
+const news = response.result;
+
 </script>
 
 <template>
@@ -75,33 +79,34 @@ const roomSwiper = useSwiper(roomSwiperRef);
             </div>
           </div>
           <div class="col-12 col-md-10 d-flex flex-column gap-10">
-            <div class="card bg-transparent border-0">
+
+            <div class="card bg-transparent border-0" v-for="newsItem in news" :key="newsItem._id">
               <div
                 class="d-flex flex-column flex-md-row align-items-center gap-6"
               >
                 <picture>
                   <source
-                    srcset="/images/home-news-1.png"
+                    :srcset="newsItem.image"
                     media="(min-width: 576px)"
                   />
                   <img
-                    src="/images/home-news-sm-1.png"
+                    :src="newsItem.image_sm"
                     class="w-100 rounded-3"
-                    alt="可看見海景及泳池的套房"
+                    :alt="newsItem.title"
                   />
                 </picture>
                 <div class="card-body p-0">
                   <h3 class="card-title mb-2 mb-md-6 fw-bold">
-                    秋季旅遊，豪華享受方案
+                    {{ newsItem.title }}
                   </h3>
                   <p class="card-text text-neutral-80 fs-8 fs-md-7 fw-medium">
-                    秋天就是要來場豪華的旅遊！我們為您準備了一系列的秋季特別方案，包括舒適的住宿、美食饗宴，以及精彩的活動。不論您是想來一趟浪漫之旅，還是想和家人共度美好時光，都能在這裡找到最適合的方案。
+                    {{ newsItem.description }}
                   </p>
                 </div>
               </div>
             </div>
 
-            <div class="card bg-transparent border-0">
+            <!-- <div class="card bg-transparent border-0">
               <div
                 class="d-flex flex-column flex-md-row align-items-center gap-6"
               >
@@ -149,7 +154,7 @@ const roomSwiper = useSwiper(roomSwiperRef);
                   </p>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>

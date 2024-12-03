@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export default defineNuxtPlugin((nuxtApp) => {
   const instance = axios.create({
-    baseURL: 'https://nuxr3.zeabur.app',
+    baseURL: 'https://nuxt3-hotel-freyja.onrender.com',
   });
 
   // 添加請求攔截器，將 Token 自動添加到每個請求
