@@ -54,7 +54,6 @@ const swiperStyles = {
           delay: 3000,
           disableOnInteraction: false,
         }"
-        :navigation="true"
         :scrollbar="true"
         class="swiper"
         :style="swiperStyles"

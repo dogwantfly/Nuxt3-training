@@ -4,20 +4,36 @@ const slides = ref(Array.from({ length: 5 }))
 
 
 const roomSwiper = useSwiper(roomSwiperRef);
+const swiperStyles = {
+  '--swiper-pagination-bottom': '24px',
+  '--swiper-pagination-bullet-width': '32px',
+  '--swiper-pagination-bullet-height': '4px',
+  '--swiper-pagination-bullet-inactive-color': '#F1EAE4',
+  '--swiper-pagination-color': '#BF9D7D',
+  '--swiper-pagination-bullet-inactive-opacity': '0.7',
+  '--swiper-pagination-bullet-opacity': '1',
+  '--swiper-pagination-bullet-horizontal-gap': '6px',
+  '--swiper-pagination-bullet-border-radius': '100px',
+  '--swiper-navigation-color': '#BF9D7D',
+  '--swiper-navigation-size': '44px',
+  '--swiper-navigation-top-offset': '50%',
+  '--swiper-navigation-sides-offset': '10px',
+  '--swiper-navigation-background-color': 'rgba(255, 255, 255, 0.5)',
+  '--swiper-navigation-padding': '8px',
+  '--swiper-navigation-border-radius': '50%',
+};
 </script>
 
 <template>
   <main class="overflow-hidden">
     <section class="hero position-relative">
       <swiper-container
-
         :slides-per-view="1"
         :pagination="true"
         :autoplay="{ delay: 3000 }"
-        navigation
         pagination
         loop
-        @swiper="onSwiper"
+        :style="swiperStyles"
       >
         <swiper-slide v-for="(num, index) in 5" :key="index">
           <picture>
@@ -922,5 +938,4 @@ section .btn {
   border-radius: 100px;
   opacity: 1;
 }
-
 </style>
