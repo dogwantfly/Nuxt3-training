@@ -696,7 +696,7 @@ section .btn {
 }
 
 .news .container::before {
-  background-image: url('@/assets/images/deco-dot-group.svg');
+  background-image: url('/images/deco-dot-group.svg');
   content: '';
   display: block;
   position: absolute;
@@ -706,7 +706,7 @@ section .btn {
   height: 200px;
 
   @include media-breakpoint-down(md) {
-    background-image: url('@/assets/images/deco-dot-group-sm.svg');
+    background-image: url('/images/deco-dot-group-sm.svg');
     width: 100px;
     height: 100px;
     top: -40px;
@@ -715,7 +715,7 @@ section .btn {
 }
 
 .news .container::after {
-  background-image: url('@/assets/images/deco-dot-group.svg');
+  background-image: url('/images/deco-dot-group.svg');
   content: '';
   display: block;
   position: absolute;
@@ -725,7 +725,7 @@ section .btn {
   height: 200px;
 
   @include media-breakpoint-down(md) {
-    background-image: url('@/assets/images/deco-dot-group-sm.svg');
+    background-image: url('/images/deco-dot-group-sm.svg');
     width: 100px;
     height: 100px;
     bottom: -140px;
@@ -735,7 +735,7 @@ section .btn {
 
 
 .about {
-  background-image: url('@/assets/images/home-about.png');
+  background-image: url('/images/home-about.png');
   height: 992px;
   background-position-y: 120px;
   background-repeat: no-repeat;
@@ -781,12 +781,12 @@ section .btn {
   content: '';
   width: 375px;
   height: 84px;
-  background-image: url('@/assets/images/deco-line-group-horizontal-sm.svg');
+  background-image: url('/images/deco-line-group-horizontal-sm.svg');
   background-repeat: no-repeat;
 
 
   @include media-breakpoint-up(md) {
-    background-image: url('@/assets/images/deco-line-group-horizontal.svg');
+    background-image: url('/images/deco-line-group-horizontal.svg');
     width: 1060px;
     height: 187px;
     top: -50px;
@@ -818,12 +818,12 @@ section .btn {
   content: '';
   width: 375px;
   height: 132px;
-  background-image: url('@/assets/images/deco-wave-bg-sm.svg');
+  background-image: url('/images/deco-wave-bg-sm.svg');
   background-repeat: no-repeat;
 
 
   @include media-breakpoint-up(md) {
-    background-image: url('@/assets/images/deco-wave-bg.svg');
+    background-image: url('/images/deco-wave-bg.svg');
     width: 1920px;
     height: 86%;
     bottom: 0;
@@ -876,7 +876,7 @@ section .btn {
     content: '';
     width: 200px;
     height: 200px;
-    background-image: url('../assets/images/deco-dot-group.svg');
+    background-image: url('/images/deco-dot-group.svg');
   }
 }
 
@@ -888,7 +888,7 @@ section .btn {
     content: '';
     width: 187px;
     height: 1068px;
-    background-image: url('@/assets/images/deco-line-group-vertical.svg');
+    background-image: url('/images/deco-line-group-vertical.svg');
   }
 }
 
