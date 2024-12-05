@@ -1,9 +1,10 @@
 <script setup>
 const roomSwiperRef = ref(null);
-const slides = ref(Array.from({ length: 5 }))
-
-
 const roomSwiper = useSwiper(roomSwiperRef);
+const slides = ref(Array.from({ length: 5 }))
+const heroSwiperRef = ref(null)
+
+
 const swiperStyles = {
   '--swiper-pagination-bottom': '24px',
   '--swiper-pagination-bullet-width': '32px',
@@ -22,6 +23,38 @@ const swiperStyles = {
   '--swiper-navigation-padding': '8px',
   '--swiper-navigation-border-radius': '50%',
 };
+
+onMounted(async () => {
+  const heroSwiperStyle = document.createElement('style');
+  const styleTextContent = `
+    .swiper .swiper-pagination {
+      bottom: 24px;
+    }
+
+    .swiper .swiper-pagination-bullet {
+      width: 32px;
+      height: 4px;
+      background-color: #f1eae4;
+      border-radius: 100px;
+      opacity: 1;
+    }
+
+    .swiper .swiper-pagination-bullet-active {
+      width: 60px;
+      background-color: #bf9d7d;
+    }
+
+    :host {
+      --swiper-theme-color: #bf9d7d;
+    }
+  `;
+  heroSwiperStyle.textContent = styleTextContent;
+  const roomSwiperStyle = document.createElement('style');
+  roomSwiperStyle.textContent = styleTextContent;
+  await nextTick();
+  heroSwiperRef.value.shadowRoot.appendChild(heroSwiperStyle);
+  roomSwiperRef.value.shadowRoot.appendChild(roomSwiperStyle);
+});
 </script>
 
 <template>
@@ -34,6 +67,7 @@ const swiperStyles = {
         pagination
         loop
         :style="swiperStyles"
+        ref="heroSwiperRef"
       >
         <swiper-slide v-for="(num, index) in 5" :key="index">
           <picture>
@@ -925,17 +959,5 @@ section .btn {
   mask-repeat: no-repeat;
   -webkit-mask-size: 100% 100%;
   mask-size: 100% 100%;
-}
-
-.swiper :deep(.swiper-pagination) {
-  bottom: 24px;
-}
-
-.swiper :deep(.swiper-pagination-bullet) {
-  width: 32px;
-  height: 4px;
-  background-color: #F1EAE4;
-  border-radius: 100px;
-  opacity: 1;
 }
 </style>

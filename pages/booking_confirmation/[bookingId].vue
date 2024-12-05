@@ -7,7 +7,7 @@ const { bookingId } = route.params;
   <main class="overflow-hidden pt-18 pt-md-30 bg-neutral-120">
     <div class="container py-10 py-md-30">
       <div class="row gap-15 gap-md-0">
-        <div class="col-12 col-md-7">
+        <div class="col-md-6 col-lg-7">
           <div
             class="d-flex flex-column flex-md-row align-items-md-center gap-4 gap-md-10 mb-8 mb-md-10"
           >
@@ -15,8 +15,8 @@ const { bookingId } = route.params;
               class="p-2 display-4 text-neutral-0 bg-success-100 rounded-circle"
               icon="material-symbols:check"
             />
-            <div class="text-neutral-0 fs-1">
-              <h1 class="fw-bold">恭喜，Jessica！</h1>
+            <div class="text-neutral-0 fs-2 fs-lg-1">
+              <h1 class="fw-bold fs-2 fs-lg-1">恭喜，Jessica！</h1>
               <p class="mb-0 fw-bold">您已預訂成功</p>
             </div>
           </div>
@@ -57,9 +57,9 @@ const { bookingId } = route.params;
           </div>
         </div>
 
-        <div class="col-12 col-md-5">
+        <div class="col-12 col-md-6 col-lg-5">
           <div
-            class="rounded-3xl d-flex flex-column gap-6 gap-md-10 p-4 p-md-10 mx-auto ms-md-auto bg-neutral-0"
+            class="rounded-3xl d-flex flex-column gap-6 gap-md-10 p-4 p-md-6 p-lg-10 mx-auto ms-md-auto bg-neutral-0"
             style="max-width: 478px"
           >
             <div>
@@ -79,7 +79,7 @@ const { bookingId } = route.params;
 
             <section class="d-flex flex-column gap-6">
               <h3
-                class="d-flex align-items-center mb-6 text-neutral-80 fs-8 fs-md-6 fw-bold"
+                class="d-flex align-items-center mb-6 text-neutral-80 fs-8 fs-lg-6 fw-bold"
               >
                 <p class="mb-0">尊爵雙人房，1 晚</p>
                 <span
@@ -89,7 +89,7 @@ const { bookingId } = route.params;
                 <p class="mb-0">住宿人數：2 位</p>
               </h3>
 
-              <div class="text-neutral-80 fs-8 fs-md-7 fw-bold">
+              <div class="text-neutral-80 fs-8 fs-lg-7 fw-bold">
                 <p class="title-deco mb-2">
                   入住：6 月 10 日星期二，15:00 可入住
                 </p>

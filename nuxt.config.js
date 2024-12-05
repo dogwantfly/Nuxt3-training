@@ -26,7 +26,12 @@ export default defineNuxtConfig({
   },
   swiper: {
     prefix: 'Swiper', 
-    styleLang: 'css', 
+    styleLang: 'scss', 
     modules: ['autoplay', 'navigation', 'pagination'],
+  },
+  vue: {
+    compilerOptions: {
+      isCustomElement: (tag) => tag.startsWith("swiper-"),
+    },
   },
 });

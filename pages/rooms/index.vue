@@ -26,7 +26,7 @@ const roomImages = computed(() => {
 });
 
 const swiperStyles = {
-  '--swiper-pagination-bottom': '24px',
+  '--swiper-pagination-bottom': '32px',
   '--swiper-pagination-bullet-width': '32px',
   '--swiper-pagination-bullet-height': '4px',
   '--swiper-pagination-bullet-inactive-color': '#F1EAE4',
@@ -43,6 +43,144 @@ const swiperStyles = {
   '--swiper-navigation-padding': '8px',
   '--swiper-navigation-border-radius': '50%',
 };
+const bootstrapBreakpoints = {
+  xs: 0,
+  sm: 576,
+  md: 768,
+  lg: 992,
+  xl: 1200,
+  xxl: 1400,
+  xxxl: 1537,
+};
+
+const heroSwiper = ref(null);
+const swiperEl1 = ref(null);
+const swiperEl2 = ref(null);
+const swiperEl3 = ref(null);
+const swiperEl4 = ref(null);
+
+onMounted(async () => {
+  const heroSwiperStyle = document.createElement('style');
+  heroSwiperStyle.textContent = `
+    .swiper .swiper-pagination {
+      bottom: 32px;
+    }
+    .swiper .swiper-wrapper {
+      min-width: 0;
+    }
+    .swiper .swiper-pagination {
+      bottom: 32px;
+    }
+
+    .swiper .swiper-pagination-bullet {
+      width: 32px;
+      height: 4px;
+      background-color: #f1eae4;
+      border-radius: 100px;
+      opacity: 1;
+    }
+
+    .swiper .swiper-pagination-bullet-active {
+      width: 60px;
+      background-color: #bf9d7d;
+    }
+
+    :host {
+      --swiper-theme-color: #bf9d7d;
+    }
+  `;
+
+  const swiperStyleTextContent = `
+    .swiper .swiper-wrapper {
+      min-width: 0;
+    }
+    .swiper .swiper-button-prev,
+    .swiper .swiper-button-next {
+      width: 56px;
+      height: 56px;
+      background-color: #ffffff;
+      color: #4b4b4b;
+      border-radius: 100px;
+    }
+    @media (max-width: ${bootstrapBreakpoints.md}px) {
+      .swiper .swiper-button-prev,
+      .swiper .swiper-button-next {
+        display: none;
+      }
+    }
+      
+
+    .swiper .swiper-button-prev svg,
+    .swiper .swiper-button-next svg {
+      font-size: 40px;
+    }
+
+    .swiper .swiper-button-prev svg {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='m14 18l-6-6l6-6l1.4 1.4l-4.6 4.6l4.6 4.6z'/%3E%3C/svg%3E");
+      background-color: currentColor;
+      -webkit-mask-image: var(--svg);
+      mask-image: var(--svg);
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+    }
+
+    .swiper .swiper-button-next svg {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M12.6 12L8 7.4L9.4 6l6 6l-6 6L8 16.6z'/%3E%3C/svg%3E");
+      background-color: currentColor;
+      -webkit-mask-image: var(--svg);
+      mask-image: var(--svg);
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+    }
+
+
+    .swiper .swiper-pagination {
+      bottom: 32px;
+    }
+
+    .swiper .swiper-pagination-bullet {
+      width: 32px;
+      height: 4px;
+      background-color: #f1eae4;
+      border-radius: 100px;
+      opacity: 1;
+    }
+
+    .swiper .swiper-pagination-bullet-active {
+      width: 60px;
+      background-color: #bf9d7d;
+    }
+
+    :host {
+      --swiper-theme-color: #bf9d7d;
+    }
+  `;
+
+  const style1 = document.createElement('style');
+  style1.textContent = swiperStyleTextContent;
+  const style2 = document.createElement('style');
+  style2.textContent = swiperStyleTextContent;
+  const style3 = document.createElement('style');
+  style3.textContent = swiperStyleTextContent;
+  const style4 = document.createElement('style');
+  style4.textContent = swiperStyleTextContent;
+  await nextTick();
+  heroSwiper.value.shadowRoot.appendChild(heroSwiperStyle);
+  swiperEl1.value.shadowRoot.appendChild(style1);
+  swiperEl2.value.shadowRoot.appendChild(style2);
+  swiperEl3.value.shadowRoot.appendChild(style3);
+  swiperEl4.value.shadowRoot.appendChild(style4);
+});
 </script>
 <template>
   <main>
@@ -57,6 +195,7 @@ const swiperStyles = {
         :scrollbar="true"
         class="swiper"
         :style="swiperStyles"
+        ref="heroSwiper"
       >
         <swiper-slide v-for="(num, index) in slides" :key="index">
           <picture>
@@ -101,7 +240,7 @@ const swiperStyles = {
                 <ClientOnly>
                   <swiper-container
                     :slides-per-view="1"
-                    navigation
+                    :navigation="true"
                     :pagination="{ clickable: true }"
                     :autoplay="{
                       delay: 2500,
@@ -109,6 +248,7 @@ const swiperStyles = {
                     }"
                     class="swiper"
                     :style="swiperStyles"
+                    ref="swiperEl1"
                   >
                     <swiper-slide v-for="(num, index) in 5" :key="index">
                       <picture>
@@ -195,7 +335,7 @@ const swiperStyles = {
                 <ClientOnly>
                   <swiper-container
                     :slides-per-view="1"
-                    navigation
+                    :navigation="true"
                     :pagination="{ clickable: true }"
                     :autoplay="{
                       delay: 2500,
@@ -203,6 +343,7 @@ const swiperStyles = {
                     }"
                     class="swiper"
                     :style="swiperStyles"
+                    ref="swiperEl2"
                   >
                     <swiper-slide v-for="(num, index) in 5" :key="index">
                       <picture>
@@ -289,7 +430,7 @@ const swiperStyles = {
                 <ClientOnly>
                   <swiper-container
                     :slides-per-view="1"
-                    navigation
+                    :navigation="true"
                     :pagination="{ clickable: true }"
                     :autoplay="{
                       delay: 2500,
@@ -297,6 +438,7 @@ const swiperStyles = {
                     }"
                     class="swiper"
                     :style="swiperStyles"
+                    ref="swiperEl3"
                   >
                     <swiper-slide v-for="(num, index) in 5" :key="index">
                       <picture>
@@ -383,7 +525,7 @@ const swiperStyles = {
                 <ClientOnly>
                   <swiper-container
                     :slides-per-view="1"
-                    navigation
+                    :navigation="true"
                     :pagination="{ clickable: true }"
                     :autoplay="{
                       delay: 2500,
@@ -391,6 +533,7 @@ const swiperStyles = {
                     }"
                     class="swiper"
                     :style="swiperStyles"
+                    ref="swiperEl4"
                   >
                     <swiper-slide v-for="(num, index) in 5" :key="index">
                       <picture>
@@ -527,84 +670,5 @@ $grid-breakpoints: (
 
 .swiper {
   display: grid;
-}
-.swiper :deep(.swiper-wrapper) {
-  min-width: 0;
-}
-
-.swiper :deep(.swiper-button-prev),
-.swiper :deep(.swiper-button-next) {
-  width: 56px;
-  height: 56px;
-  background-color: #ffffff;
-  color: #4b4b4b;
-  border-radius: 100px;
-
-  @include media-breakpoint-down(md) {
-    display: none;
-  }
-}
-
-.swiper :deep(.swiper-button-prev::after),
-.swiper :deep(.swiper-button-next::after) {
-  font-size: 40px;
-}
-
-.swiper :deep(.swiper-button-prev::after) {
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='m14 18l-6-6l6-6l1.4 1.4l-4.6 4.6l4.6 4.6z'/%3E%3C/svg%3E");
-  background-color: currentColor;
-  -webkit-mask-image: var(--svg);
-  mask-image: var(--svg);
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-}
-
-.swiper :deep(.swiper-button-next::after) {
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M12.6 12L8 7.4L9.4 6l6 6l-6 6L8 16.6z'/%3E%3C/svg%3E");
-  background-color: currentColor;
-  -webkit-mask-image: var(--svg);
-  mask-image: var(--svg);
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-}
-
-.hero .swiper :deep(.swiper-pagination) {
-  bottom: 32px;
-}
-
-.swiper :deep(.swiper-pagination) {
-  bottom: 24px;
-}
-
-.swiper :deep(.swiper-pagination-bullet) {
-  width: 32px;
-  height: 4px;
-  background-color: #f1eae4;
-  border-radius: 100px;
-  opacity: 1;
-}
-
-.swiper :deep(.swiper-pagination-bullet-active) {
-  width: 60px;
-  background-color: #bf9d7d;
-}
-
-swiper-container span::part(bullet-active) {
-  width: 60px;
-  background-color: #bf9d7d;
-}
-
-:host {
-  --swiper-theme-color: #bf9d7d;
 }
 </style>
