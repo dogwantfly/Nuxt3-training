@@ -72,28 +72,26 @@ onUnmounted(() => {
                   style="right: 0; left: auto; border-radius: 20px"
                 >
                   <li>
-                    <a class="dropdown-item px-6 py-4" href="#">我的帳戶</a>
+                    <NuxtLink class="dropdown-item px-6 py-4" to="/user/profile">我的帳戶</NuxtLink>
                   </li>
                   <li>
-                    <a class="dropdown-item px-6 py-4" href="#">登出</a>
+                    <NuxtLink class="dropdown-item px-6 py-4" to="/account/login">登出</NuxtLink>
                   </li>
                 </ul>
               </div>
             </li>
             <li class="d-md-none nav-item">
-              <RouterLink to="/" class="nav-link p-4 text-neutral-0">
+              <NuxtLink to="/user/login" class="nav-link p-4 text-neutral-0">
                 會員登入
-              </RouterLink>
+              </NuxtLink>
             </li>
             <li class="nav-item">
-              <RouterLink
-                :to="{
-                  name: 'rooms',
-                }"
+              <NuxtLink
+                to="/rooms"
                 class="btn btn-primary-100 px-8 py-4 text-white fw-bold border-0 rounded-3"
               >
                 立即訂房
-              </RouterLink>
+              </NuxtLink>
             </li>
           </ul>
         </div>

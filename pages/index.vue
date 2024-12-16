@@ -1,6 +1,60 @@
 <script setup>
 const roomSwiperRef = ref(null);
+const roomSwiper = useSwiper(roomSwiperRef);
 const slides = ref(Array.from({ length: 5 }))
+const heroSwiperRef = ref(null)
+
+
+const swiperStyles = {
+  '--swiper-pagination-bottom': '24px',
+  '--swiper-pagination-bullet-width': '32px',
+  '--swiper-pagination-bullet-height': '4px',
+  '--swiper-pagination-bullet-inactive-color': '#F1EAE4',
+  '--swiper-pagination-color': '#BF9D7D',
+  '--swiper-pagination-bullet-inactive-opacity': '0.7',
+  '--swiper-pagination-bullet-opacity': '1',
+  '--swiper-pagination-bullet-horizontal-gap': '6px',
+  '--swiper-pagination-bullet-border-radius': '100px',
+  '--swiper-navigation-color': '#BF9D7D',
+  '--swiper-navigation-size': '44px',
+  '--swiper-navigation-top-offset': '50%',
+  '--swiper-navigation-sides-offset': '10px',
+  '--swiper-navigation-background-color': 'rgba(255, 255, 255, 0.5)',
+  '--swiper-navigation-padding': '8px',
+  '--swiper-navigation-border-radius': '50%',
+};
+
+onMounted(async () => {
+  const heroSwiperStyle = document.createElement('style');
+  const styleTextContent = `
+    .swiper .swiper-pagination {
+      bottom: 24px;
+    }
+
+    .swiper .swiper-pagination-bullet {
+      width: 32px;
+      height: 4px;
+      background-color: #f1eae4;
+      border-radius: 100px;
+      opacity: 1;
+    }
+
+    .swiper .swiper-pagination-bullet-active {
+      width: 60px;
+      background-color: #bf9d7d;
+    }
+
+    :host {
+      --swiper-theme-color: #bf9d7d;
+    }
+  `;
+  heroSwiperStyle.textContent = styleTextContent;
+  const roomSwiperStyle = document.createElement('style');
+  roomSwiperStyle.textContent = styleTextContent;
+  await nextTick();
+  heroSwiperRef.value.shadowRoot.appendChild(heroSwiperStyle);
+  roomSwiperRef.value.shadowRoot.appendChild(roomSwiperStyle);
+});
 
 const { $apiClient } = useNuxtApp();
 
@@ -15,14 +69,13 @@ const culinary = response_culinary.result;
   <main class="overflow-hidden">
     <section class="hero position-relative">
       <swiper-container
-
         :slides-per-view="1"
         :pagination="true"
         :autoplay="{ delay: 3000 }"
-        navigation
         pagination
         loop
-        @swiper="onSwiper"
+        :style="swiperStyles"
+        ref="heroSwiperRef"
       >
         <swiper-slide v-for="(num, index) in 5" :key="index">
           <picture>
@@ -465,7 +518,7 @@ section .btn {
 }
 
 .news .container::before {
-  background-image: url('@/assets/images/deco-dot-group.svg');
+  background-image: url('/images/deco-dot-group.svg');
   content: '';
   display: block;
   position: absolute;
@@ -475,7 +528,7 @@ section .btn {
   height: 200px;
 
   @include media-breakpoint-down(md) {
-    background-image: url('@/assets/images/deco-dot-group-sm.svg');
+    background-image: url('/images/deco-dot-group-sm.svg');
     width: 100px;
     height: 100px;
     top: -40px;
@@ -484,7 +537,7 @@ section .btn {
 }
 
 .news .container::after {
-  background-image: url('@/assets/images/deco-dot-group.svg');
+  background-image: url('/images/deco-dot-group.svg');
   content: '';
   display: block;
   position: absolute;
@@ -494,7 +547,7 @@ section .btn {
   height: 200px;
 
   @include media-breakpoint-down(md) {
-    background-image: url('@/assets/images/deco-dot-group-sm.svg');
+    background-image: url('/images/deco-dot-group-sm.svg');
     width: 100px;
     height: 100px;
     bottom: -140px;
@@ -504,7 +557,7 @@ section .btn {
 
 
 .about {
-  background-image: url('@/assets/images/home-about.png');
+  background-image: url('/images/home-about.png');
   height: 992px;
   background-position-y: 120px;
   background-repeat: no-repeat;
@@ -550,12 +603,12 @@ section .btn {
   content: '';
   width: 375px;
   height: 84px;
-  background-image: url('@/assets/images/deco-line-group-horizontal-sm.svg');
+  background-image: url('/images/deco-line-group-horizontal-sm.svg');
   background-repeat: no-repeat;
 
 
   @include media-breakpoint-up(md) {
-    background-image: url('@/assets/images/deco-line-group-horizontal.svg');
+    background-image: url('/images/deco-line-group-horizontal.svg');
     width: 1060px;
     height: 187px;
     top: -50px;
@@ -587,12 +640,12 @@ section .btn {
   content: '';
   width: 375px;
   height: 132px;
-  background-image: url('@/assets/images/deco-wave-bg-sm.svg');
+  background-image: url('/images/deco-wave-bg-sm.svg');
   background-repeat: no-repeat;
 
 
   @include media-breakpoint-up(md) {
-    background-image: url('@/assets/images/deco-wave-bg.svg');
+    background-image: url('/images/deco-wave-bg.svg');
     width: 1920px;
     height: 86%;
     bottom: 0;
@@ -645,7 +698,7 @@ section .btn {
     content: '';
     width: 200px;
     height: 200px;
-    background-image: url('../assets/images/deco-dot-group.svg');
+    background-image: url('/images/deco-dot-group.svg');
   }
 }
 
@@ -657,7 +710,7 @@ section .btn {
     content: '';
     width: 187px;
     height: 1068px;
-    background-image: url('@/assets/images/deco-line-group-vertical.svg');
+    background-image: url('/images/deco-line-group-vertical.svg');
   }
 }
 
@@ -729,17 +782,4 @@ section .btn {
   -webkit-mask-size: 100% 100%;
   mask-size: 100% 100%;
 }
-
-.swiper :deep(.swiper-pagination) {
-  bottom: 24px;
-}
-
-.swiper :deep(.swiper-pagination-bullet) {
-  width: 32px;
-  height: 4px;
-  background-color: #F1EAE4;
-  border-radius: 100px;
-  opacity: 1;
-}
-
 </style>

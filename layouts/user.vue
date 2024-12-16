@@ -1,79 +1,77 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
-  <main class="pt-18 pt-md-30 bg-neutral-120">
-    <section class="position-relative">
+  <div>
+    <AppHeader />
+    <main class="pt-18 pt-md-30 bg-neutral-120">
+      <section class="position-relative">
+        <picture>
+          <source
+            srcset="/images/profile-hero.png"
+            media="(min-width: 576px)"
+          />
+          <img
+            class="w-100 object-fit-cover"
+            style="height: 384px"
+            src="/images/profile-hero-sm.png"
+            alt="profile-hero"
+          />
+        </picture>
+        <div class="container">
+          <div
+            class="hero-content d-flex flex-column flex-md-row justify-content-center justify-content-md-start align-items-md-center gap-4 gap-md-6 mx-5 my-10 mx-md-0 my-md-0"
+          >
+            <img class="avatar" src="/images/avatar-6.png" alt="avatar" />
+            <h1 class="text-neutral-0 fw-bold">Hello，Jessica</h1>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-10 pt-md-20 pb-md-30">
+        <div class="container">
+          <ul class="nav mb-10 mb-md-20 fw-bold">
+            <li class="nav-item position-relative">
+              <NuxtLink
+                to="/user/profile"
+                exact-active-class="text-primary-100"
+                class="nav-link px-6 py-4 text-white"
+              >
+                個人資料
+              </NuxtLink>
+            </li>
+            <li class="nav-item position-relative">
+              <NuxtLink
+                to="/user/orders"
+                exact-active-class="text-primary-100"
+                class="nav-link px-6 py-4 text-white"
+              >
+                我的訂單
+              </NuxtLink>
+            </li>
+          </ul>
+
+          <NuxtPage />
+        </div>
+      </section>
+
       <picture>
         <source
-          srcset="/images/profile-hero.png"
-          media="(min-width: 576px)"
-        >
+          srcset="/images/deco-line-group-horizontal-full.svg"
+          media="(min-width:576px)"
+        />
         <img
-          class="w-100 object-fit-cover"
-          style="height: 384px;"
-          src="/images/profile-hero-sm.png"
-          alt="profile-hero"
-        >
+          class="w-100"
+          src="/images/deco-line-group-horizontal-sm.svg"
+          alt="deco-line-group"
+        />
       </picture>
-      <div class="container">
-        <div class="hero-content d-flex flex-column flex-md-row justify-content-center justify-content-md-start align-items-md-center gap-4 gap-md-6 mx-5 my-10 mx-md-0 my-md-0">
-          <img
-            class="avatar"
-            src="/images/avatar-6.png"
-            alt="avatar"
-          >
-          <h1 class="text-neutral-0 fw-bold">
-            Hello，Jessica
-          </h1>
-        </div>
-      </div>
-    </section>
-
-    <section class="py-10 pt-md-20 pb-md-30">
-      <div class="container">
-        <ul class="nav mb-10 mb-md-20 fw-bold">
-          <li class="nav-item position-relative">
-            <NuxtLink
-              to="/user/profile"
-              exact-active-class="text-primary-100"
-              class="nav-link px-6 py-4 text-white"
-            >
-              個人資料
-            </NuxtLink>
-          </li>
-          <li class="nav-item position-relative">
-            <NuxtLink
-              to="/user/orders"
-              exact-active-class="text-primary-100"
-              class="nav-link px-6 py-4 text-white"
-            >
-              我的訂單
-            </NuxtLink>
-          </li>
-        </ul>
-
-        <NuxtPage />
-      </div>
-    </section>
-
-    <picture>
-      <source
-        srcset="/images/deco-line-group-horizontal-full.svg"
-        media="(min-width:576px)"
-      >
-      <img
-        class="w-100"
-        src="/images/deco-line-group-horizontal-sm.svg"
-        alt="deco-line-group"
-      >
-    </picture>
-  </main>
+    </main>
+    <AppFooter />
+  </div>
 </template>
 
 <style lang="scss" scoped>
-@import "bootstrap/scss/mixins/breakpoints";
+@import 'bootstrap/scss/mixins/breakpoints';
 
 $grid-breakpoints: (
   xs: 0,
@@ -82,15 +80,14 @@ $grid-breakpoints: (
   lg: 992px,
   xl: 1200px,
   xxl: 1400px,
-  xxxl: 1537px
+  xxxl: 1537px,
 );
-
 
 .hero-content {
   position: absolute;
   top: 0;
   bottom: 0;
-  
+
   @include media-breakpoint-down(md) {
     inset: 0;
   }
@@ -105,7 +102,6 @@ $grid-breakpoints: (
     height: 72px;
   }
 }
-
 
 .nav-link.text-primary-100::after {
   position: absolute;

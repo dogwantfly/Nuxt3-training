@@ -31,7 +31,7 @@ const roomId = 'a';  // for navigation demo
         >
 
         <section class="d-flex flex-column gap-6">
-          <h3 class="d-flex align-items-center mb-0 text-neutral-80 fs-8 fs-md-6 fw-bold">
+          <h3 class="d-flex align-items-center mb-0 text-neutral-80 fs-8 fs-lg-6 fw-bold">
             <p class="mb-0">
               尊爵雙人房，1 晚
             </p>
@@ -422,9 +422,9 @@ const roomId = 'a';  // for navigation demo
       </div>
     </div>
   </div>
-
-  <div
-    id="cancelModal"
+  <ClientOnly>
+    <div
+      id="cancelModal"
     class="modal fade"
     tabindex="-1"
   >
@@ -459,8 +459,9 @@ const roomId = 'a';  // for navigation demo
           </button>
         </div>
       </div>
+      </div>
     </div>
-  </div>
+  </ClientOnly>
 </template>
 
 <style lang="scss" scoped>

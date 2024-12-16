@@ -29,7 +29,7 @@ const confirmBooking = () => {
         </button>
 
         <div class="row gap-10 gap-md-0">
-          <div class="col-12 col-md-7">
+          <div class="col-12 col-md-6 col-lg-7">
             <section>
               <h2 class="mb-8 mb-md-10 text-neutral-100 fs-6 fs-md-4 fw-bold">
                 訂房資訊
@@ -139,7 +139,7 @@ const confirmBooking = () => {
                   <label for="address" class="form-label fs-8 fs-md-7 fw-bold"
                     >地址</label
                   >
-                  <div className="d-flex gap-2 mb-4">
+                  <div class="d-flex gap-2 mb-4">
                     <select
                       class="form-select w-50 p-4 text-neutral-80 fs-8 fs-md-7 fw-medium rounded-3"
                     >
@@ -274,70 +274,70 @@ const confirmBooking = () => {
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">平面電視</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">平面電視</p>
                     </li>
                     <li class="flex-item d-flex gap-2">
                       <Icon
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">吹風機</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">吹風機</p>
                     </li>
                     <li class="flex-item d-flex gap-2">
                       <Icon
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">冰箱</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">冰箱</p>
                     </li>
                     <li class="flex-item d-flex gap-2">
                       <Icon
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">熱水壺</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">熱水壺</p>
                     </li>
                     <li class="flex-item d-flex gap-2">
                       <Icon
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">檯燈</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">檯燈</p>
                     </li>
                     <li class="flex-item d-flex gap-2">
                       <Icon
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">衣櫃</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">衣櫃</p>
                     </li>
                     <li class="flex-item d-flex gap-2">
                       <Icon
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">除濕機</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">除濕機</p>
                     </li>
                     <li class="flex-item d-flex gap-2">
                       <Icon
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">浴缸</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">浴缸</p>
                     </li>
                     <li class="flex-item d-flex gap-2">
                       <Icon
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">書桌</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">書桌</p>
                     </li>
                     <li class="flex-item d-flex gap-2">
                       <Icon
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">音響</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">音響</p>
                     </li>
                   </ul>
                 </section>
@@ -356,70 +356,70 @@ const confirmBooking = () => {
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">衛生紙</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">衛生紙</p>
                     </li>
                     <li class="flex-item d-flex gap-2">
                       <Icon
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">拖鞋</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">拖鞋</p>
                     </li>
                     <li class="flex-item d-flex gap-2">
                       <Icon
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">沐浴用品</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">沐浴用品</p>
                     </li>
                     <li class="flex-item d-flex gap-2">
                       <Icon
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">清潔用品</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">清潔用品</p>
                     </li>
                     <li class="flex-item d-flex gap-2">
                       <Icon
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">刮鬍刀</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">刮鬍刀</p>
                     </li>
                     <li class="flex-item d-flex gap-2">
                       <Icon
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">吊衣架</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">吊衣架</p>
                     </li>
                     <li class="flex-item d-flex gap-2">
                       <Icon
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">浴巾</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">浴巾</p>
                     </li>
                     <li class="flex-item d-flex gap-2">
                       <Icon
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">刷牙用品</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">刷牙用品</p>
                     </li>
                     <li class="flex-item d-flex gap-2">
                       <Icon
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">罐裝水</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">罐裝水</p>
                     </li>
                     <li class="flex-item d-flex gap-2">
                       <Icon
                         class="fs-5 text-primary-100"
                         icon="material-symbols:check"
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">梳子</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">梳子</p>
                     </li>
                   </ul>
                 </section>
@@ -427,7 +427,7 @@ const confirmBooking = () => {
             </section>
           </div>
 
-          <div class="col-12 col-md-5">
+          <div class="col-12 col-md-6 col-lg-5">
             <div
               class="confirm-form rounded-3xl d-flex flex-column gap-10 p-6 p-md-10 mx-auto ms-md-auto me-md-0 bg-neutral-0"
             >
@@ -447,14 +447,14 @@ const confirmBooking = () => {
                   <div
                     class="d-flex align-items-center text-neutral-100 fw-medium"
                   >
-                    <span>NT$ 10,000</span>
+                    <span class="text-nowrap">NT$ 10,000</span>
                     <Icon
                       class="ms-2 me-1 text-neutral-80"
                       icon="material-symbols:close"
                     />
-                    <span class="text-neutral-80">2 晚</span>
+                    <span class="text-neutral-80 text-nowrap">2 晚</span>
                   </div>
-                  <span class="fw-medium"> NT$ 20,000 </span>
+                  <span class="fw-medium text-nowrap"> NT$ 20,000 </span>
                 </div>
                 <div
                   class="d-flex justify-content-between align-items-center fw-medium"
