@@ -29,15 +29,9 @@ export default defineNuxtConfig({
     styleLang: 'scss', 
     modules: ['autoplay', 'navigation', 'pagination'],
   },
-<<<<<<< HEAD
   runtimeConfig: {
     public: {
       apiBase: process.env.API_BASE_URL,
-=======
-  vue: {
-    compilerOptions: {
-      isCustomElement: (tag) => tag.startsWith("swiper-"),
->>>>>>> main
     },
   },
 });
