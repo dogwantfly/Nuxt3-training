@@ -1,9 +1,71 @@
 <script setup>
+import { useAuthStore } from '~/stores/auth';
+import cityCountyData from '~/assets/cityCountyData.json';
+
 definePageMeta({
   layout: 'account',
 });
 
 const isEmailAndPasswordValid = ref(false);
+const authStore = useAuthStore();
+const initialFormData = {
+       email: '',
+       password: '',
+       confirmPassword: '',
+       name: '',
+       phone: '',
+       birthday: {
+         year: '2000',
+         month: '1',
+         day: '1',
+       },
+       address: {
+         city: '臺北市',
+         area: '中正區',
+         detail: '',
+       },
+    agreementCheck: false,
+  };
+const formData = ref(initialFormData);
+const birthday = ref({
+  year: '2000',
+  month: '1',
+  day: '1',
+});
+const daysInMonth = (year, month) => {
+  return new Date(year, month, 0).getDate();
+};
+const areaList = ref([]);
+
+const setAreaList = (cityName) => {
+  const selectedCity = cityCountyData.find(city => city.CityName === cityName);
+  areaList.value = selectedCity.AreaList;
+  formData.value.address.area = areaList.value[0].AreaName;
+  formData.value.address.zipcode = areaList.value[0].ZipCode;
+};
+
+onMounted(() => {
+  setAreaList(formData.value.address.city);
+});
+
+watch(() => formData.value.address.city, (newCity) => {
+  setAreaList(newCity);
+});
+watch(() => birthday.value.year, (newYear) => {
+  daysInMonth(newYear, birthday.value.month);
+});
+watch(() => birthday.value.month, (newMonth) => {
+  daysInMonth(birthday.value.year, newMonth);
+});
+watch(birthday, (newBirthday) => {
+  formData.value.birthday = newBirthday;
+}, { deep: true });
+
+const resetForm = () => {
+  formData.value = initialFormData;
+};
+
+
 </script>
 
 <template>
@@ -70,6 +132,7 @@ const isEmailAndPasswordValid = ref(false);
             class="form-control p-4 text-neutral-100 fw-medium border-neutral-40"
             placeholder="hello@exsample.com"
             type="email"
+            v-model="formData.email"
           >
         </div>
         <div class="mb-4 fs-8 fs-md-7">
@@ -84,6 +147,7 @@ const isEmailAndPasswordValid = ref(false);
             class="form-control p-4 text-neutral-100 fw-medium border-neutral-40"
             placeholder="請輸入密碼"
             type="password"
+            v-model="formData.password"
           >
         </div>
         <div class="mb-10 fs-8 fs-md-7">
@@ -98,6 +162,7 @@ const isEmailAndPasswordValid = ref(false);
             class="form-control p-4 text-neutral-100 fw-medium border-neutral-40"
             placeholder="請再輸入一次密碼"
             type="password"
+            v-model="formData.confirmPassword"
           >
         </div>
         <button
@@ -124,6 +189,7 @@ const isEmailAndPasswordValid = ref(false);
             class="form-control p-4 text-neutral-100 fw-medium border-neutral-40  rounded-3"
             placeholder="請輸入姓名"
             type="text"
+            v-model="formData.name"
           >
         </div>
         <div class="mb-4 fs-8 fs-md-7">
@@ -135,9 +201,10 @@ const isEmailAndPasswordValid = ref(false);
           </label>
           <input
             id="phone"
-            class="form-control p-4 text-neutral-100 fw-medium border-neutral-40  rounded-3"
+            class="form-control p-4 text-neutral-100 fw-medium border-neutral-40 rounded-3"
             placeholder="請輸入手機號碼"
             type="tel"
+            v-model="formData.phone"
           >
         </div>
         <div class="mb-4 fs-8 fs-md-7">
@@ -153,33 +220,36 @@ const isEmailAndPasswordValid = ref(false);
             <select
               id="birth"
               class="form-select p-4 text-neutral-80 fw-medium rounded-3"
+              v-model="birthday.year"
             >
               <option
-                v-for="year in 65"
+                v-for="year in 100"
                 :key="year"
-                value="`${year + 1958} 年`"
+                :value="new Date().getFullYear() - (100 - year)"
               >
-                {{ year + 1958 }} 年
+                {{ new Date().getFullYear() - (100 - year) }} 年
               </option>
             </select>
             <select
               class="form-select p-4 text-neutral-80 fw-medium rounded-3"
+              v-model="birthday.month"
             >
               <option
                 v-for="month in 12"
                 :key="month"
-                value="`${month} 月`"
+                :value="month"
               >
                 {{ month }} 月
               </option>
             </select>
             <select
               class="form-select p-4 text-neutral-80 fw-medium rounded-3"
+              v-model="birthday.day"
             >
               <option
-                v-for="day in 30"
+                v-for="day in daysInMonth(birthday.year, birthday.month)"
                 :key="day"
-                value="`${day} 日`"
+                :value="day"
               >
                 {{ day }} 日
               </option>
@@ -199,34 +269,18 @@ const isEmailAndPasswordValid = ref(false);
             >
               <select
                 class="form-select p-4 text-neutral-80 fw-medium rounded-3"
+                v-model="formData.address.city"
               >
-                <option value="臺北市">
-                  臺北市
-                </option>
-                <option value="臺中市">
-                  臺中市
-                </option>
-                <option
-                  selected
-                  value="高雄市"
-                >
-                  高雄市
+                <option v-for="city in cityCountyData" :key="city.CityName">
+                  {{ city.CityName }}
                 </option>
               </select>
               <select
                 class="form-select p-4 text-neutral-80 fw-medium rounded-3"
+                v-model="formData.address.area"
               >
-                <option value="前金區">
-                  前金區
-                </option>
-                <option value="鹽埕區">
-                  鹽埕區
-                </option>
-                <option
-                  selected
-                  value="新興區"
-                >
-                  新興區
+                <option v-for="area in areaList" :key="area.AreaName">
+                  {{ area.AreaName }}
                 </option>
               </select>
             </div>
@@ -235,6 +289,7 @@ const isEmailAndPasswordValid = ref(false);
               type="text"
               class="form-control p-4 rounded-3"
               placeholder="請輸入詳細地址"
+              v-model="formData.address.detail"
             >
           </div>
         </div>
@@ -244,7 +299,7 @@ const isEmailAndPasswordValid = ref(false);
             id="agreementCheck"
             class="form-check-input"
             type="checkbox"
-            value=""
+            v-model="formData.agreementCheck"
           >
           <label
             class="form-check-label fw-bold"
@@ -256,6 +311,7 @@ const isEmailAndPasswordValid = ref(false);
         <button
           class="btn btn-primary-100 w-100 py-4 text-neutral-0 fw-bold"
           type="button"
+          @click="authStore.register(formData, resetForm)"
         >
           完成註冊
         </button>

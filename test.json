@@ -1,0 +1,111 @@
+{
+  "name": "豪華雅緻房",
+  "description": 豪華雅緻房擁有絕美的高雄市景觀，讓您在舒適的環境中欣賞城市之美。",
+  "imageUrl": "https://hlbgwvnbxxopavpqcrbe.supabase.co/storage/v1/object/public/nuxt3-hotel/room-c-1.png",
+"imageUrl_sm":"https://hlbgwvnbxxopavpqcrbe.supabase.co/storage/v1/object/public/nuxt3-hotel/room-c-sm-1.png",
+  "imageUrlList": [
+    "https://hlbgwvnbxxopavpqcrbe.supabase.co/storage/v1/object/public/nuxt3-hotel/room-c-2.png",
+    "https://hlbgwvnbxxopavpqcrbe.supabase.co/storage/v1/object/public/nuxt3-hotel/room-c-3.png",
+    "https://hlbgwvnbxxopavpqcrbe.supabase.co/storage/v1/object/public/nuxt3-hotel/room-c-4.png",
+"https://hlbgwvnbxxopavpqcrbe.supabase.co/storage/v1/object/public/nuxt3-hotel/room-c-5.png"
+  ],
+"imageUrlList_sm": [
+    "https://hlbgwvnbxxopavpqcrbe.supabase.co/storage/v1/object/public/nuxt3-hotel/room-c-sm-2.png",
+    "https://hlbgwvnbxxopavpqcrbe.supabase.co/storage/v1/object/public/nuxt3-hotel/room-c-sm-3.png",
+    "https://hlbgwvnbxxopavpqcrbe.supabase.co/storage/v1/object/public/nuxt3-hotel/room-c-sm-4.png",
+"https://hlbgwvnbxxopavpqcrbe.supabase.co/storage/v1/object/public/nuxt3-hotel/room-c-sm-5.png"
+  ],
+  "areaInfo": "36坪",
+      "bedInfo": "兩張大床",
+      "maxPeople": 4,
+      "price": 18000,
+      "status": 1,
+      "layoutInfo": [
+        {
+          "title": "市景",
+          "isProvide": true
+        },
+        {
+          "title": "獨立衛浴",
+          "isProvide": true
+        },
+        {
+          "title": "客廳",
+          "isProvide": true
+        },
+        {
+          "title": "書房",
+          "isProvide": true
+        },
+        {
+          "title": "樓層電梯",
+          "isProvide": true
+        }
+      ],
+      "facilityInfo": [
+        {
+          "title": "平面電視",
+          "isProvide": true
+        },
+        {
+          "title": "吹風機",
+          "isProvide": true
+        },
+        {
+          "title": "冰箱",
+          "isProvide": true
+        },
+        {
+          "title": "熱水壺",
+          "isProvide": true
+        },
+        {
+          "title": "檯燈",
+          "isProvide": true
+        },
+        {
+          "title": "衣櫥",
+          "isProvide": true
+        },
+        {
+          "title": "浴缸",
+          "isProvide": true
+        },
+        {
+          "title": "書桌",
+          "isProvide": true
+        }
+      ],
+      "amenityInfo": [
+        {
+          "title": "衛生紙",
+          "isProvide": true
+        },
+        {
+          "title": "拖鞋",
+          "isProvide": true
+        },
+        {
+          "title": "沐浴用品",
+          "isProvide": true
+        },
+        {
+          "title": "刮鬍刀",
+          "isProvide": true
+        },
+        {
+          "title": "刷牙用品",
+          "isProvide": true
+        },
+        {
+          "title": "罐裝水",
+          "isProvide": true
+        },
+        {
+          "title": "梳子",
+          "isProvide": true
+        }
+      ],
+      "createdAt": "2024-08-05T08:50:15.551Z",
+      "updatedAt": "2024-08-14T06:33:10.648Z"
+}

@@ -2,6 +2,7 @@
 definePageMeta({
   layout: 'user'
 })
+navigateTo('/user/profile')
 </script>
 
 <template>

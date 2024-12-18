@@ -55,14 +55,12 @@ onMounted(async () => {
   heroSwiperRef.value.shadowRoot.appendChild(heroSwiperStyle);
   roomSwiperRef.value.shadowRoot.appendChild(roomSwiperStyle);
 });
-
 const { $apiClient } = useNuxtApp();
-
-const roomSwiper = useSwiper(roomSwiperRef);
 const response = await $apiClient.get('/api/v1/home/news/');
 const news = response.result;
 const response_culinary = await $apiClient.get('/api/v1/home/culinary/');
 const culinary = response_culinary.result;
+
 </script>
 
 <template>

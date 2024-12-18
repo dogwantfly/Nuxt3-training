@@ -1,4 +1,6 @@
 <script setup>
+import { useAuthStore } from '~/stores/auth';
+const authStore = useAuthStore();
 const route = useRoute();
 const isScrolled = ref(false);
 
@@ -11,9 +13,12 @@ const isTransparentRoute = computed(() =>
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 0;
 };
+authStore.checkToken();
+authStore.getUser();
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
 });
+
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
 });
@@ -57,7 +62,7 @@ onUnmounted(() => {
                 客房旅宿
               </RouterLink>
             </li>
-            <li class="d-none d-md-block nav-item">
+            <li class="nav-item" :class="{ 'd-none': !authStore.isAuthenticated }">
               <div class="btn-group">
                 <button
                   type="button"
@@ -65,7 +70,7 @@ onUnmounted(() => {
                   data-bs-toggle="dropdown"
                 >
                   <Icon class="fs-5" icon="mdi:account-circle-outline" />
-                  Jessica
+                  {{ authStore.user?.name }}
                 </button>
                 <ul
                   class="dropdown-menu py-3 overflow-hidden"
@@ -75,13 +80,13 @@ onUnmounted(() => {
                     <NuxtLink class="dropdown-item px-6 py-4" to="/user/profile">我的帳戶</NuxtLink>
                   </li>
                   <li>
-                    <NuxtLink class="dropdown-item px-6 py-4" to="/account/login">登出</NuxtLink>
+                    <NuxtLink class="dropdown-item px-6 py-4" @click="authStore.logout">登出</NuxtLink>
                   </li>
                 </ul>
               </div>
             </li>
-            <li class="d-md-none nav-item">
-              <NuxtLink to="/user/login" class="nav-link p-4 text-neutral-0">
+            <li class="nav-item" :class="{ 'd-none': authStore.isAuthenticated }">
+              <NuxtLink to="/account/login" class="nav-link p-4 text-neutral-0">
                 會員登入
               </NuxtLink>
             </li>

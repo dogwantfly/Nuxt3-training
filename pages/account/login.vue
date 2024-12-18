@@ -1,20 +1,87 @@
 <script setup>
 import { useAuthStore } from '~/stores/auth';
+import { useToggle } from '@vueuse/core';
+
 definePageMeta({
   layout: 'account',
 });
-const email = ref('');
-const password = ref('');
+const loginInfo = ref({
+  email: '',
+  password: '',
+});
 const authStore = useAuthStore();
+const verifyEmail = ref('');
+const showResetPassword = ref(false);
+const resetPasswordInfo = ref({
+  email: '',
+  code: '',
+  newPassword: '',
+});
+const verifyEmailModal = ref(null);
+const resetPasswordModal = ref(null);
 
-const handleLogin = async () => {
-  try {
-    await authStore.login(email.value, password.value);
+onMounted(() => {
+  if (authStore.isAuthenticated) {
     navigateTo('/');
+  }
+});
+
+const [isModalOpen, toggleModal] = useToggle(false);
+const handleForgotPassword = () => {
+  toggleModal();
+};
+const handleSendEmailCode = async () => {
+  try {
+    const { $axios, $showToast } = useNuxtApp();
+
+    const response = await $axios.post('/api/v1/verify/email', {
+      email: verifyEmail.value,
+    });
+
+    if (!response.data.result.isEmailExists) {
+      $showToast('信箱不存在', { variant: 'danger' });
+      return;
+    }
+    if (response.data.status) {
+      const response = await $axios.post('/api/v1/verify/generateEmailCode', {
+        email: verifyEmail.value,
+      });
+
+
+      if (response.data.status) {
+        showResetPassword.value = true;
+        verifyEmail.value = '';
+        console.log(verifyEmailModal.value)
+        verifyEmailModal.value.closeModal();
+        showResetPassword.value = true;
+      }
+    }
+    
   } catch (err) {
-    alert('登入失敗，請檢查帳號密碼');
+    const { $showToast } = useNuxtApp();
+    $showToast('發送驗證碼失敗，請稍後再試', { variant: 'danger' });
   }
 };
+const handleResetPassword = async () => {
+  try {
+    const { $axios, $showToast } = useNuxtApp();
+    const response = await $axios.post('/api/v1/user/forgot', resetPasswordInfo.value);
+    if (response.data.status) {
+      $showToast('重設密碼成功', { variant: 'success' });
+      resetPasswordModal.value.closeModal();
+      resetPasswordInfo.value = {
+        email: '',
+        code: '',
+        newPassword: '',
+      };
+      showResetPassword.value = false;
+    }
+  } catch (err) {
+    const { $showToast } = useNuxtApp();
+    $showToast('重設密碼失敗，請稍後再試', { variant: 'danger' });
+  }
+};
+
 </script>
 
 <template>
@@ -39,7 +106,7 @@ const handleLogin = async () => {
         <input
           id="email"
           class="form-control p-4 text-neutral-100 fw-medium border-neutral-40"
-          value="jessica@sample.com"
+          v-model="loginInfo.email"
           placeholder="請輸入信箱"
           type="email"
         >
@@ -56,6 +123,7 @@ const handleLogin = async () => {
           class="form-control p-4 text-neutral-100 fw-medium border-neutral-40"
           placeholder="請輸入密碼"
           type="password"
+          v-model="loginInfo.password"
         >
       </div>
       <div class="d-flex justify-content-between align-items-center mb-10 fs-8 fs-md-7">
@@ -76,6 +144,7 @@ const handleLogin = async () => {
         <button
           class="text-primary-100 fw-bold text-decoration-underline bg-transparent border-0"
           type="button"
+          @click="handleForgotPassword"
         >
           忘記密碼？
         </button>
@@ -83,6 +152,8 @@ const handleLogin = async () => {
       <button
         class="btn btn-primary-100 w-100 py-4 text-neutral-0 fw-bold"
         type="button"
+        @click="authStore.login(loginInfo)"
+        :disabled="!loginInfo.email || !loginInfo.password"
       >
         會員登入
       </button>
@@ -97,7 +168,84 @@ const handleLogin = async () => {
         <span>前往註冊</span>
       </NuxtLink>
     </p>
+
+
+  
+    <Modal :isOpen="isModalOpen" @update:isOpen="isModalOpen = $event" ref="verifyEmailModal">
+      <form>
+        <div class="mb-4 fs-8 fs-md-7">
+          <label
+            class="mb-2 text-neutral-0 fw-bold"
+            for="email"
+          >
+            電子信箱
+          </label>
+          <input
+            id="email"
+            class="form-control p-4 text-neutral-100 fw-medium border-neutral-40 mb-2"
+            v-model="verifyEmail"
+            placeholder="請輸入信箱"
+            type="email"
+          >
+          <button
+            class="btn btn-primary-100 py-2 text-neutral-0 fw-bold"
+            type="button"
+            @click="handleSendEmailCode"
+          >
+            發送驗證碼
+          </button>
+        </div>
+      </form>
+    </Modal>
+    <Modal :isOpen="showResetPassword" @update:isOpen="showResetPassword = $event" ref="resetPasswordModal">
+      <form>
+        <h3 class="mb-4 fs-5 fw-bold text-center">重設密碼</h3>
+        <div class="mb-4 fs-8 fs-md-7 fw-bold">
+          <label for="resetPasswordEmail">Email</label>
+          <input
+            id="resetPasswordEmail"
+            class="form-control p-4 text-neutral-100 fw-medium border-neutral-40 mb-2"
+            type="text"
+            placeholder="請輸入信箱"
+            v-model="resetPasswordInfo.email"
+          >
+        </div>
+        <div class="mb-4 fs-8 fs-md-7 fw-bold">
+          <label for="resetPassword">密碼</label>
+          <input
+            id="resetPassword"
+            class="form-control p-4 text-neutral-100 fw-medium border-neutral-40 mb-2"
+            type="password"
+            placeholder="請輸入密碼"
+            v-model="resetPasswordInfo.newPassword"
+          >
+        </div>
+        
+        <div class="mb-4 fs-8 fs-md-7 fw-bold">
+          <label class="mb-2 text-neutral-0 fw-bold" for="resetPasswordCode">
+            驗證碼
+          </label>
+          <input
+            id="resetPasswordCode"
+            class="form-control p-4 text-neutral-100 fw-medium border-neutral-40 mb-2"
+            type="text"
+            placeholder="請輸入驗證碼"
+            v-model="resetPasswordInfo.code"
+          >
+          <button
+            class="btn btn-primary-100 py-2 text-neutral-0 fw-bold"
+            type="button"
+            @click="handleResetPassword"
+          >
+            重設密碼
+          </button>
+        </div>
+      </form>
+    </Modal>
   </div>
+
+  
+
 </template>
 
 <style lang="scss" scoped>
