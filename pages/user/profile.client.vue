@@ -15,8 +15,9 @@ const formattedDate = computed(() => {
 const formattedAddress = computed(() => {
   return `${formData.value.address.zipcode} ${formData.value.address.city} ${formData.value.address.area} ${formData.value.address.detail}`;
 });
+await authStore.getUser();
 onMounted(async () => {
-  await authStore.getUser();
+  
   formData.value = authStore.user;
 
   cityCountyData.forEach((city) => {

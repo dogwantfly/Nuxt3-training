@@ -30,9 +30,10 @@ const [isModalOpen, toggleModal] = useToggle(false);
 const handleForgotPassword = () => {
   toggleModal();
 };
+const { $axios, $showToast } = useNuxtApp();
 const handleSendEmailCode = async () => {
   try {
-    const { $axios, $showToast } = useNuxtApp();
+    
 
     const response = await $axios.post('/api/v1/verify/email', {
       email: verifyEmail.value,
@@ -58,13 +59,11 @@ const handleSendEmailCode = async () => {
     }
     
   } catch (err) {
-    const { $showToast } = useNuxtApp();
     $showToast('發送驗證碼失敗，請稍後再試', { variant: 'danger' });
   }
 };
 const handleResetPassword = async () => {
   try {
-    const { $axios, $showToast } = useNuxtApp();
     const response = await $axios.post('/api/v1/user/forgot', resetPasswordInfo.value);
     if (response.data.status) {
       $showToast('重設密碼成功', { variant: 'success' });
@@ -77,7 +76,6 @@ const handleResetPassword = async () => {
       showResetPassword.value = false;
     }
   } catch (err) {
-    const { $showToast } = useNuxtApp();
     $showToast('重設密碼失敗，請稍後再試', { variant: 'danger' });
   }
 };

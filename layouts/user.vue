@@ -4,9 +4,7 @@ useHead({
   title: '我的帳戶',
 })
 const authStore = useAuthStore();
-onMounted(() => {
-  authStore.getUser();
-});
+authStore.getUser();
 </script>
 
 <template>

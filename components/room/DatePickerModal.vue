@@ -6,6 +6,7 @@ const modal = ref(null);
 
 onMounted(() => {
   const modalElement = document.getElementById('dateModal');
+
   if (modalElement) {
     modal.value = $bootstrap.Modal(modalElement);
   } else {
@@ -119,10 +120,17 @@ const confirmDate = () => {
 
   closeModal();
 };
+const formatDate = (date) => {
+  const offsetToUTC8 = date.getHours() + 8;
+  date.setHours(offsetToUTC8);
+  return date.toISOString().split('T')[0];
+};
+const currentDate = new Date();
 
 const clearDate = () => {
-  tempDate.date.start = null;
+  tempDate.date.start = formatDate(currentDate);
   tempDate.date.end = null;
+  tempDate.key++;
 };
 
 
@@ -233,7 +241,7 @@ const clearDate = () => {
           <div v-else>
             <h6 class="mb-1 text-neutral-100 fw-bold">選擇人數</h6>
             <p className="mb-4 text-neutral-80 fs-8 fw-medium">
-              此房型最多供 4 人居住，不接受寵物入住。
+              此房型最多供 {{ room.maxPeople }} 人居住，不接受寵物入住。
             </p>
 
             <div class="d-flex align-items-center gap-4">

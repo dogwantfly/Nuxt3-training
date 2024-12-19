@@ -13,10 +13,12 @@ const isTransparentRoute = computed(() =>
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 0;
 };
-authStore.checkToken();
-authStore.getUser();
-onMounted(() => {
+
+
+onMounted(async () => {
   window.addEventListener('scroll', handleScroll);
+  await authStore.checkToken();
+  await authStore.getUser();
 });
 
 onUnmounted(() => {

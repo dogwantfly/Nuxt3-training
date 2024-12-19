@@ -1,5 +1,31 @@
 import { defineStore } from 'pinia';
-const { $axios, $showToast } = useNuxtApp();
+import axios from 'axios';
+
+
+const instance = axios.create({
+    baseURL: 'https://nuxt3-hotel-freyja.onrender.com',
+  });
+
+  instance.interceptors.request.use((config) => {
+    const token = useCookie('auth_token').value;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  });
+
+  instance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response?.status === 401) {
+        useCookie('auth_token').value = null;
+        navigateTo('/login');
+      }
+      return Promise.reject(error);
+    }
+  );
+
+
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -25,20 +51,16 @@ export const useAuthStore = defineStore('auth', {
     },
     async getUser() {
       try {
-        const { $axios } = useNuxtApp();
-        const response = await $axios.get('/api/v1/user');
+        const response = await instance.get('/api/v1/user');
         this.user = response.data.result;
       } catch (error) {
-        const { $showToast } = useNuxtApp();
-        $showToast('取得使用者資料失敗', { variant: 'danger' });
-        throw error;
+        return `取得使用者資料失敗 ${error}`;
       }
     },
     async login(data) {
       try {
         const { email, password } = data;
-        const { $axios } = useNuxtApp();
-        const response = await $axios.post('/api/v1/user/login', {
+        const response = await instance.post('/api/v1/user/login', {
           email,
           password,
         });
@@ -46,17 +68,14 @@ export const useAuthStore = defineStore('auth', {
         this.setToken(token);
         navigateTo('/');
       } catch (error) {
-        const { $showToast } = useNuxtApp();
-        $showToast('登入失敗', { variant: 'danger' });
-        throw error;
+        return `登入失敗 ${error}`;
       }
     },
     async register(data, resetForm) {
       try {
-        const { $axios } = useNuxtApp();
         const {  name, email ,password ,phone ,birthday ,address } = data;
         const format_birthday = `${birthday.year}/${birthday.month}/${birthday.day}`;
-        const response = await $axios.post('/api/v1/user/signup', {
+        const response = await instance.post('/api/v1/user/signup', {
           name,
           email,
           password,
@@ -70,22 +89,18 @@ export const useAuthStore = defineStore('auth', {
           navigateTo('/account/login');
         }
       } catch (error) {
-        const { $showToast } = useNuxtApp();
-        $showToast('註冊失敗', { variant: 'danger' });
-        throw error;
+        return `註冊失敗 ${error}`;
       }
     },
     async checkToken() {
       try{
-        const { $axios } = useNuxtApp();
-        const response = await $axios.get('/api/v1/user/check');
+        const response = await instance.get('/api/v1/user/check');
         if (response.status) {
           this.setToken(response.data.token);
         } 
       } catch (error) {
-        const { $showToast } = useNuxtApp();
-        $showToast('檢查 Token 失敗', { variant: 'danger' });
-        throw error;
+        console.log(error);
+        return `檢查 Token 失敗 ${error}`;
       }
     },
     initialize() {

@@ -1,5 +1,7 @@
 <script setup>
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const goBack = () => {
   router.back();
 };
@@ -13,6 +15,11 @@ const confirmBooking = () => {
     navigateTo('/booking_confirmation/HH2302183151222');
   }, 1500);
 };
+
+onMounted(() => {
+  const bookingDate = JSON.parse(localStorage.getItem('bookingDate'));
+  console.log(bookingDate);
+});
 </script>
 
 <template>
