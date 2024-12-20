@@ -1,9 +1,12 @@
 <script setup>
 import { useAuthStore } from '~/stores/auth';
+import { useBookingStore } from '~/stores/booking';
+
 const { $apiClient } = useNuxtApp();
 const route = useRoute();
 const datePickerModal = ref(null);
 const authStore = useAuthStore();
+const bookingStore = useBookingStore();
 const openModal = () => {
   datePickerModal.value.openModal();
 };
@@ -62,14 +65,20 @@ const handleBooking = async () => {
     $showToast('請先登入', { variant: 'danger' });
     return;
   }
-  console.log(bookingDate);
+
   localStorage.setItem('bookingDate', JSON.stringify(bookingDate));
+  bookingStore.setBookingInfo({
+    bookingDate: bookingDate,
+    roomId: route.params.id,
+    bookingNum: bookingPeople.value
+  });
   navigateTo(`/rooms/${route.params.id}/booking`);
 }
 
 onMounted(() => {
   const bookingDate = JSON.parse(localStorage.getItem('bookingDate'));
   if (bookingDate) {
+    
     handleDateChange(bookingDate);
   }
 });
@@ -81,16 +90,16 @@ onMounted(() => {
       <div class="d-none d-md-block position-relative">
         <div class="d-flex gap-2 rounded-3xl overflow-hidden">
           <div style="width: 52.5vw">
-            <img class="w-100" :src="room.imageUrl" alt="room-a-1" />
+            <img class="w-100" :src="room.imageUrl" :alt="`room-${route.params.id}-1`" />
           </div>
           <div class="d-flex flex-wrap gap-md-2" style="width: 42.5vw">
             <div class="d-flex gap-md-2">
-              <img class="w-50" :src="room.imageUrlList_[0]?.desktop" alt="room-a-2" />
-              <img class="w-50" :src="room.imageUrlList_[1]?.desktop" alt="room-a-3" />
+              <img class="w-50" :src="room.imageUrlList_[0]?.desktop" :alt="`room-${route.params.id}-2`" />
+              <img class="w-50" :src="room.imageUrlList_[1]?.desktop" :alt="`room-${route.params.id}-3`" />
             </div>
             <div class="d-flex gap-md-2">
-              <img class="w-50" :src="room.imageUrlList_[2]?.desktop" alt="room-a-4" />
-              <img class="w-50" :src="room.imageUrlList_[3]?.desktop" alt="room-a-5" />
+              <img class="w-50" :src="room.imageUrlList_[2]?.desktop" :alt="`room-${route.params.id}-4`" />
+              <img class="w-50" :src="room.imageUrlList_[3]?.desktop" :alt="`room-${route.params.id}-5`" />
             </div>
           </div>
         </div>
@@ -103,7 +112,7 @@ onMounted(() => {
         </button>
       </div>
       <div class="d-md-none position-relative">
-        <img class="img-fluid" :src="room.imageUrl.sm" alt="room-a-1" />
+        <img class="img-fluid" :src="room.imageUrl.sm" :alt="`room-${route.params.id}-1`" />
         <button
           class="position-absolute btn btn-primary-10 px-8 py-4 text-primary-100 border-primary-100 fw-bold rounded-3"
           style="bottom: 23px; right: 12px"

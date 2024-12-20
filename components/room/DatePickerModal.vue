@@ -1,5 +1,6 @@
 <script setup>
 import { useBreakpoints } from '@vueuse/core';
+import dayjs from 'dayjs';
 
 const { $bootstrap } = useNuxtApp();
 const modal = ref(null);
@@ -77,7 +78,9 @@ const titlePosition = ref('center');
 
 
 
-const formatDateTitle = (date) => date?.replace(/-/g, ' / ');
+const formatDateTitle = (date) => {
+  return dayjs(date).format('YYYY/MM/DD');
+};
 
 const daysCount = computed(() => {
   const startDate = tempDate.date.start;
@@ -121,19 +124,22 @@ const confirmDate = () => {
   closeModal();
 };
 const formatDate = (date) => {
-  const offsetToUTC8 = date.getHours() + 8;
-  date.setHours(offsetToUTC8);
-  return date.toISOString().split('T')[0];
+
+  return dayjs(date).toISOString().split('T')[0];
 };
 const currentDate = new Date();
 
 const clearDate = () => {
   tempDate.date.start = formatDate(currentDate);
-  tempDate.date.end = null;
+  tempDate.date.end = formatDate(currentDate.setDate(currentDate.getDate() + 1));
   tempDate.key++;
 };
 
-
+watch(props.dateTime, (newDate) => {
+  console.log(newDate);
+  tempDate.date.start = dayjs(newDate.date.start);
+  tempDate.date.end = dayjs(newDate.date.end);
+}, { deep: true });
 
 </script>
 
@@ -176,9 +182,9 @@ const clearDate = () => {
               {{ daysCount }} 晚
             </h3>
             <div class="d-flex gap-2 text-neutral-80 fw-medium">
-              <span>{{ tempDate.date.start?.replaceAll('-', ' / ') }}</span>
+              <span>{{ dayjs(tempDate.date.start).format('YYYY/MM/DD') }}</span>
               -
-              <span>{{ tempDate.date.end?.replaceAll('-', ' / ') }}</span>
+              <span>{{ dayjs(tempDate.date.end).format('YYYY/MM/DD') }}</span>
             </div>
           </div>
 
