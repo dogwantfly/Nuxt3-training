@@ -1,31 +1,28 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-
 const instance = axios.create({
-    baseURL: 'https://nuxt3-hotel-freyja.onrender.com',
-  });
+  baseURL: 'https://nuxt3-hotel-freyja.onrender.com',
+});
 
-  instance.interceptors.request.use((config) => {
-    const token = useCookie('auth_token').value;
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+instance.interceptors.request.use((config) => {
+  const token = useCookie('auth_token').value;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+instance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      useCookie('auth_token').value = null;
+      navigateTo('/login');
     }
-    return config;
-  });
-
-  instance.interceptors.response.use(
-    (response) => response,
-    (error) => {
-      if (error.response?.status === 401) {
-        useCookie('auth_token').value = null;
-        navigateTo('/login');
-      }
-      return Promise.reject(error);
-    }
-  );
-
-
+    return Promise.reject(error);
+  }
+);
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -38,7 +35,7 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     setToken(token) {
       this.token = token;
-      const tokenCookie = useCookie('auth_token',{
+      const tokenCookie = useCookie('auth_token', {
         path: '/',
         maxAge: 60 * 60 * 24 * 7,
       });
@@ -73,7 +70,7 @@ export const useAuthStore = defineStore('auth', {
     },
     async register(data, resetForm) {
       try {
-        const {  name, email ,password ,phone ,birthday ,address } = data;
+        const { name, email, password, phone, birthday, address } = data;
         const format_birthday = `${birthday.year}/${birthday.month}/${birthday.day}`;
         const response = await instance.post('/api/v1/user/signup', {
           name,
@@ -81,7 +78,7 @@ export const useAuthStore = defineStore('auth', {
           password,
           phone,
           birthday: format_birthday,
-          address
+          address,
         });
         if (response && response.status) {
           this.setToken(response.data.token);
@@ -93,11 +90,11 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     async checkToken() {
-      try{
+      try {
         const response = await instance.get('/api/v1/user/check');
         if (response.status) {
           this.setToken(response.data.token);
-        } 
+        }
       } catch (error) {
         console.log(error);
         return `檢查 Token 失敗 ${error}`;
@@ -107,7 +104,6 @@ export const useAuthStore = defineStore('auth', {
       const tokenCookie = useCookie('auth_token');
       if (tokenCookie.value) {
         this.token = tokenCookie.value;
-        this.getUser();
       }
     },
     logout() {
