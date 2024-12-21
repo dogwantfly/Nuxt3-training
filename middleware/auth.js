@@ -3,5 +3,5 @@ export default defineNuxtRouteMiddleware((to, from) => {
   if (!tokenCookie.value && to.path !== '/login') {
     return navigateTo('/login');
   }
-  authStore.checkToken();
+  // authStore.checkToken();
 });
