@@ -12,7 +12,7 @@ const getOrders = async () => {
   const res = await $axios.get('/api/v1/orders');
   orders.value = res.data.result.sort((a, b) => dayjs(b.checkInDate).diff(dayjs(a.checkInDate)));
   const today = dayjs().format('YYYY-MM-DD'); 
-  comingSoonOrders.value = res.data.result.filter(order => dayjs(order.checkInDate).isAfter(today) && order.status === 1);
+  comingSoonOrders.value = res.data.result.filter(order => dayjs(order.checkInDate).isAfter(today) && order.status !== -1);
 }
 
 onMounted(async () => {
@@ -22,7 +22,6 @@ onMounted(async () => {
 const handleDeleteOrder = async (id) => {
   try {
     const res = await $axios.delete(`/api/v1/orders/${id}`);
-    console.log(res);
     await getOrders();
     $showToast('刪除訂單成功', { variant: 'success' });
   } catch (error) {
@@ -58,7 +57,7 @@ const handleDeleteOrder = async (id) => {
         <section class="d-flex flex-column gap-6">
           <h3 class="d-flex align-items-center mb-0 text-neutral-80 fs-8 fs-lg-6 fw-bold">
             <p class="mb-0">
-              {{ comingSoonOrders[0].roomId?.name }}，{{ comingSoonOrders[0].daysCount }} 晚
+              {{ comingSoonOrders[0].roomId?.name }}，{{ dayjs(comingSoonOrders[0].checkOutDate).diff(dayjs(comingSoonOrders[0].checkInDate), 'day') }} 晚
             </p>
             <span
               class="d-inline-block mx-4 bg-neutral-80"

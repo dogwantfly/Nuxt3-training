@@ -17,8 +17,9 @@ const handleScroll = () => {
 
 onMounted(async () => {
   window.addEventListener('scroll', handleScroll);
-  await authStore.checkToken();
-  await authStore.getUser();
+  if (authStore.isAuthenticated) {
+    await authStore.getUser();
+  }
 });
 
 onUnmounted(() => {
