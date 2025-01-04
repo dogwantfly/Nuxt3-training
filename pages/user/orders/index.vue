@@ -25,7 +25,6 @@ onMounted(async () => {
 const handleDeleteOrder = async (id) => {
   try {
     const res = await $axios.delete(`/api/v1/orders/${id}`);
-    console.log(res);
     await getOrders();
     $showToast('刪除訂單成功', { variant: 'success' });
   } catch (error) {
