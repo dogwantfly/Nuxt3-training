@@ -4,7 +4,7 @@ import { useBookingStore } from '~/stores/booking';
 import { useAuthStore } from '~/stores/auth';
 import cityCountyData from '~/assets/cityCountyData.json';
 import dayjs from 'dayjs';
-import 'dayjs/locale/zh-tw'; 
+import 'dayjs/locale/zh-tw';
 dayjs.locale('zh-tw');
 
 const { $apiClient } = useNuxtApp();
@@ -27,11 +27,11 @@ const goBack = () => {
 const isLoading = ref(false);
 useHead({
   title: '確認訂房資訊',
-})
+});
 const { $showToast, $axios } = useNuxtApp();
 const confirmBooking = async () => {
   const userInfo = bookingInfo.value.user;
-  const isAllFilled = Object.values(userInfo).every(value => value !== '');
+  const isAllFilled = Object.values(userInfo).every((value) => value !== '');
   if (!isAllFilled) {
     $showToast('請填寫完整資料', {
       variant: 'danger',
@@ -46,32 +46,32 @@ const confirmBooking = async () => {
     checkOutDate: bookingInfo.value.bookingDate.date.end,
     peopleNum: bookingInfo.value.bookingNum,
     userInfo: {
-    address: {
-      zipcode: bookingInfo.value.user.address.zipcode,
-      detail: bookingInfo.value.user.address.detail,
+      address: {
+        zipcode: bookingInfo.value.user.address.zipcode,
+        detail: bookingInfo.value.user.address.detail,
+      },
+      name: bookingInfo.value.user.name,
+      phone: bookingInfo.value.user.phone,
+      email: bookingInfo.value.user.email,
     },
-    name: bookingInfo.value.user.name,
-    phone: bookingInfo.value.user.phone,
-    email: bookingInfo.value.user.email,
+  };
+  try {
+    const response = await $axios.post('/api/v1/orders/', data);
+    if (response.data.status) {
+      localStorage.removeItem('bookingInfo');
+      localStorage.removeItem('bookingDate');
+      setTimeout(() => {
+        isLoading.value = false;
+        navigateTo(`/booking_confirmation/${response.data.result._id}`);
+      }, 1500);
+    }
+  } catch (error) {
+    $showToast(`訂房失敗: ${error.response.data.message}`, {
+      variant: 'danger',
+    });
+  } finally {
+    isLoading.value = false;
   }
-}
-try {
-  const response = await $axios.post('/api/v1/orders/', data)  
-  if(response.data.status) {
-    localStorage.removeItem('bookingInfo');
-    localStorage.removeItem('bookingDate');
-    setTimeout(() => {
-      isLoading.value = false;
-      navigateTo(`/booking_confirmation/${response.data.result._id}`);
-    }, 1500);
-  }
-} catch (error) {
-  $showToast(`訂房失敗: ${error.response.data.message}`, {
-    variant: 'danger',
-  });
-} finally {
-  isLoading.value = false;
-}
 };
 const bookingInfo = ref({
   user: {
@@ -92,33 +92,34 @@ onMounted(async () => {
   const storedBookingInfo = JSON.parse(localStorage.getItem('bookingInfo'));
 
   bookingInfo.value = {
-
-      bookingDate: {
-    date: {
-      start: '',
-      end: '',
-    },
-  },
-  
-    user: {
-    name: '',
-    phone: '',
-    email: '',
-    address: {
-      city: '臺北市',
-      area: '中正區',
-      zipCode: 100,
-      detail: '',
+    bookingDate: {
+      date: {
+        start: '',
+        end: '',
       },
     },
-        ...storedBookingInfo
+
+    user: {
+      name: '',
+      phone: '',
+      email: '',
+      address: {
+        city: '臺北市',
+        area: '中正區',
+        zipCode: 100,
+        detail: '',
+      },
+    },
+    ...storedBookingInfo,
   };
-  const response = await $apiClient.get(`/api/v1/rooms/${bookingInfo.value.roomId}`);
-if (response && response.result) {
-  room.value = response.result;
-} else {
-  console.error('Failed to load room data');
-}
+  const response = await $apiClient.get(
+    `/api/v1/rooms/${bookingInfo.value.roomId}`
+  );
+  if (response && response.result) {
+    room.value = response.result;
+  } else {
+    console.error('Failed to load room data');
+  }
 });
 const daysCount = computed(() => {
   const date = bookingInfo.value.bookingDate?.date;
@@ -133,24 +134,48 @@ const formatDate = (date) => {
   return date.toISOString().split('T')[0];
 };
 const handleUseMemberInfo = () => {
- 
   bookingInfo.value.user = authStore.user;
-  const county = cityCountyData.find(city => city.AreaList.find(area => area.ZipCode == authStore.user.address.zipcode));
+  const county = cityCountyData.find((city) =>
+    city.AreaList.find((area) => area.ZipCode == authStore.user.address.zipcode)
+  );
   bookingInfo.value.user.address.city = county.CityName;
-  bookingInfo.value.user.address.area = county.AreaList.find(area => area.ZipCode == authStore.user.address.zipcode).AreaName;
+  bookingInfo.value.user.address.area = county.AreaList.find(
+    (area) => area.ZipCode == authStore.user.address.zipcode
+  ).AreaName;
 };
 const areaList = ref([]);
 
 const setAreaList = (cityName) => {
   console.log(cityName);
-  const selectedCity = cityCountyData.find(city => city.CityName === cityName);
+  const selectedCity = cityCountyData.find(
+    (city) => city.CityName === cityName
+  );
   areaList.value = selectedCity.AreaList;
   bookingInfo.value.user.address.area = areaList.value[0].AreaName;
   bookingInfo.value.user.address.zipcode = areaList.value[0].ZipCode;
 };
-watch(() => bookingInfo.value.user.address.city, (newCity) => {
-  setAreaList(newCity);
+watch(
+  () => bookingInfo.value.user.address.city,
+  (newCity) => {
+    setAreaList(newCity);
+  }
+);
+
+const isEdit = ref({
+  roomName: false,
+  bookingDate: false,
+  bookingNum: false,
+  userInfo: false,
 });
+
+const response_rooms = await $apiClient.get('/api/v1/rooms/');
+const rooms = response_rooms.result;
+
+const handleEditBooking = () => {
+  isEdit.value.roomName = false;
+  bookingInfo.value.roomId = room.value._id;
+  room.value = rooms.find((room) => room._id === bookingInfo.value.roomId);
+};
 </script>
 
 <template>
@@ -179,12 +204,35 @@ watch(() => bookingInfo.value.user.address.city, (newCity) => {
                   <div>
                     <h3 class="title-deco mb-2 fs-7 fw-bold">選擇房型</h3>
                     <p class="mb-0 fw-medium">{{ room.name }}</p>
+                    <template v-if="isEdit.roomName">
+                      <select
+                        class="form-select p-4 text-neutral-80 fs-8 fs-md-7 fw-medium rounded-3 mt-2"
+                        v-model="room._id"
+                      >
+                        <option
+                          v-for="room in rooms"
+                          :key="room._id"
+                          :value="room._id"
+                        >
+                          {{ room.name }}
+                        </option>
+                      </select>
+                    </template>
                   </div>
                   <button
                     class="bg-transparent border-0 fw-bold text-decoration-underline"
                     type="button"
+                    @click="isEdit.roomName = !isEdit.roomName"
                   >
-                    編輯
+                    {{ !isEdit.roomName ? '編輯' : '取消' }}
+                  </button>
+                  <button
+                    class="bg-transparent border-0 fw-bold text-decoration-underline"
+                    type="button"
+                    @click="handleEditBooking"
+                    v-if="isEdit.roomName"
+                  >
+                    確定
                   </button>
                 </div>
                 <div
@@ -192,8 +240,20 @@ watch(() => bookingInfo.value.user.address.city, (newCity) => {
                 >
                   <div>
                     <h3 class="title-deco mb-2 fs-7 fw-bold">訂房日期</h3>
-                    <p class="mb-2 fw-medium">入住：{{ dayjs(bookingInfo.bookingDate?.date.start).format('M 月 D 日 dddd') }}</p>
-                    <p class="mb-0 fw-medium">退房：{{ dayjs(bookingInfo.bookingDate?.date.end).format('M 月 D 日 dddd') }}</p>
+                    <p class="mb-2 fw-medium">
+                      入住：{{
+                        dayjs(bookingInfo.bookingDate?.date.start).format(
+                          'M 月 D 日 dddd'
+                        )
+                      }}
+                    </p>
+                    <p class="mb-0 fw-medium">
+                      退房：{{
+                        dayjs(bookingInfo.bookingDate?.date.end).format(
+                          'M 月 D 日 dddd'
+                        )
+                      }}
+                    </p>
                   </div>
                   <button
                     class="bg-transparent border-0 fw-bold text-decoration-underline"
@@ -207,7 +267,9 @@ watch(() => bookingInfo.value.user.address.city, (newCity) => {
                 >
                   <div>
                     <h3 class="title-deco mb-2 fs-7 fw-bold">房客人數</h3>
-                    <p class="mb-0 fw-medium">{{ bookingInfo.bookingNum }} 人</p>
+                    <p class="mb-0 fw-medium">
+                      {{ bookingInfo.bookingNum }} 人
+                    </p>
                   </div>
                   <button
                     class="bg-transparent border-0 fw-bold text-decoration-underline"
@@ -286,17 +348,20 @@ watch(() => bookingInfo.value.user.address.city, (newCity) => {
                       class="form-select w-50 p-4 text-neutral-80 fs-8 fs-md-7 fw-medium rounded-3"
                       v-model="bookingInfo.user.address.city"
                     >
-                      <option v-for="city in cityCountyData" :key="city.CityName">
-                  {{ city.CityName }}
-                </option>
+                      <option
+                        v-for="city in cityCountyData"
+                        :key="city.CityName"
+                      >
+                        {{ city.CityName }}
+                      </option>
                     </select>
                     <select
                       class="form-select w-50 p-4 text-neutral-80 fs-8 fs-md-7 fw-medium rounded-3"
                       v-model="bookingInfo.user.address.area"
                     >
                       <option v-for="area in areaList" :key="area.AreaName">
-                  {{ area.AreaName }}
-                </option>
+                        {{ area.AreaName }}
+                      </option>
                     </select>
                   </div>
                   <input
@@ -367,12 +432,22 @@ watch(() => bookingInfo.value.user.address.city, (newCity) => {
                   <ul
                     class="d-flex flex-wrap gap-6 gap-md-10 p-6 fs-8 fs-md-7 bg-neutral-0 rounded-3 list-unstyled"
                   >
-                    <li class="flex-item d-flex gap-2" v-for="item in room.layoutInfo" :key="item.title">
+                    <li
+                      class="flex-item d-flex gap-2"
+                      v-for="item in room.layoutInfo"
+                      :key="item.title"
+                    >
                       <Icon
                         class="fs-5 text-primary-100"
-                        :icon="item.isProvide ? `material-symbols:check` : `material-symbols:close`"
+                        :icon="
+                          item.isProvide
+                            ? `material-symbols:check`
+                            : `material-symbols:close`
+                        "
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold">{{ item.title }}</p>
+                      <p class="mb-0 text-neutral-80 fw-bold">
+                        {{ item.title }}
+                      </p>
                     </li>
                   </ul>
                 </section>
@@ -386,12 +461,22 @@ watch(() => bookingInfo.value.user.address.city, (newCity) => {
                   <ul
                     class="d-flex flex-wrap row-gap-2 column-gap-10 p-6 mb-0 fs-8 fs-md-7 bg-neutral-0 rounded-3 list-unstyled"
                   >
-                    <li class="flex-item d-flex gap-2" v-for="item in room.facilityInfo" :key="item.title">
+                    <li
+                      class="flex-item d-flex gap-2"
+                      v-for="item in room.facilityInfo"
+                      :key="item.title"
+                    >
                       <Icon
                         class="fs-5 text-primary-100 flex-shrink-0"
-                        :icon="item.isProvide ? `material-symbols:check` : `material-symbols:close`"
+                        :icon="
+                          item.isProvide
+                            ? `material-symbols:check`
+                            : `material-symbols:close`
+                        "
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">{{ item.title }}</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">
+                        {{ item.title }}
+                      </p>
                     </li>
                   </ul>
                 </section>
@@ -405,12 +490,22 @@ watch(() => bookingInfo.value.user.address.city, (newCity) => {
                   <ul
                     class="d-flex flex-wrap row-gap-2 column-gap-10 p-6 mb-0 fs-8 fs-md-7 bg-neutral-0 rounded-3 list-unstyled"
                   >
-                    <li class="flex-item d-flex gap-2" v-for="item in room.amenityInfo" :key="item.title">
+                    <li
+                      class="flex-item d-flex gap-2"
+                      v-for="item in room.amenityInfo"
+                      :key="item.title"
+                    >
                       <Icon
                         class="fs-5 text-primary-100 flex-shrink-0"
-                        :icon="item.isProvide ? `material-symbols:check` : `material-symbols:close`"
+                        :icon="
+                          item.isProvide
+                            ? `material-symbols:check`
+                            : `material-symbols:close`
+                        "
                       />
-                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">{{ item.title }}</p>
+                      <p class="mb-0 text-neutral-80 fw-bold text-nowrap">
+                        {{ item.title }}
+                      </p>
                     </li>
                   </ul>
                 </section>
@@ -443,24 +538,32 @@ watch(() => bookingInfo.value.user.address.city, (newCity) => {
                       class="ms-2 me-1 text-neutral-80"
                       icon="material-symbols:close"
                     />
-                    <span class="text-neutral-80 text-nowrap">{{ daysCount }} 晚</span>
+                    <span class="text-neutral-80 text-nowrap"
+                      >{{ daysCount }} 晚</span
+                    >
                   </div>
-                  <span class="fw-medium text-nowrap"> NT$ {{ room.price * daysCount }} </span>
+                  <span class="fw-medium text-nowrap">
+                    NT$ {{ room.price * daysCount }}
+                  </span>
                 </div>
-                <div  
+                <div
                   class="d-flex justify-content-between align-items-center fw-medium"
                 >
                   <p class="d-flex align-items-center mb-0 text-neutral-100">
                     住宿折扣
                   </p>
-                  <span class="text-primary-100"> -NT$ {{ room.discount || 1000 }} </span>
+                  <span class="text-primary-100">
+                    -NT$ {{ room.discount || 1000 }}
+                  </span>
                 </div>
                 <hr class="my-6 opacity-100 text-neutral-40" />
                 <div
                   class="d-flex justify-content-between align-items-center text-neutral-100 fw-bold"
                 >
                   <p class="d-flex align-items-center mb-0">總價</p>
-                  <span> NT$ {{ room.price * daysCount - (room.discount || 1000) }} </span>
+                  <span>
+                    NT$ {{ room.price * daysCount - (room.discount || 1000) }}
+                  </span>
                 </div>
               </div>
 
