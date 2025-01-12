@@ -86,10 +86,9 @@ const bookingInfo = ref({
     },
   },
 });
-
+const storedBookingInfo = JSON.parse(localStorage.getItem('bookingInfo'));
 onMounted(async () => {
   setAreaList(bookingInfo.value.user.address.city);
-  const storedBookingInfo = JSON.parse(localStorage.getItem('bookingInfo'));
 
   bookingInfo.value = {
     bookingDate: {
@@ -146,7 +145,6 @@ const handleUseMemberInfo = () => {
 const areaList = ref([]);
 
 const setAreaList = (cityName) => {
-  console.log(cityName);
   const selectedCity = cityCountyData.find(
     (city) => city.CityName === cityName
   );
@@ -175,6 +173,28 @@ const handleEditBooking = () => {
   isEdit.value.roomName = false;
   bookingInfo.value.roomId = room.value._id;
   room.value = rooms.find((room) => room._id === bookingInfo.value.roomId);
+};
+const handleEditBookingDate = () => {
+  isEdit.value.bookingDate = false;
+  bookingInfo.value.bookingDate.date.start =
+    tempEditBookingDate.value.date.start;
+  bookingInfo.value.bookingDate.date.end = tempEditBookingDate.value.date.end;
+};
+
+const datePickerModal = ref(null);
+const openModal = () => {
+  datePickerModal.value.openModal();
+};
+const tempEditBookingDate = ref({
+  date: {
+    start: storedBookingInfo.bookingDate.date.start,
+    end: storedBookingInfo.bookingDate.date.end,
+  },
+});
+const handleDateChange = (bookingInfo) => {
+  const { start, end } = bookingInfo.date;
+  tempEditBookingDate.value.date.start = start;
+  tempEditBookingDate.value.date.end = end;
 };
 </script>
 
@@ -258,10 +278,60 @@ const handleEditBooking = () => {
                   <button
                     class="bg-transparent border-0 fw-bold text-decoration-underline"
                     type="button"
+                    @click="isEdit.bookingDate = !isEdit.bookingDate"
                   >
-                    編輯
+                    {{ !isEdit.bookingDate ? '編輯' : '取消' }}
+                  </button>
+                  <button
+                    class="bg-transparent border-0 fw-bold text-decoration-underline"
+                    type="button"
+                    v-if="isEdit.bookingDate"
+                    @click="handleEditBookingDate"
+                  >
+                    確定
                   </button>
                 </div>
+                <template v-if="isEdit.bookingDate">
+                  <div class="d-flex flex-wrap gap-2 mb-4">
+                    <div class="form-floating flex-grow-1 flex-shrink-1">
+                      <input
+                        id="checkinInput"
+                        readonly
+                        type="date"
+                        class="form-control p-4 pt-9 text-neutral-100 fw-medium border-neutral-100 rounded-3"
+                        style="min-height: 74px"
+                        placeholder="yyyy-mm-dd"
+                        v-model="tempEditBookingDate.date.start"
+                        @click="openModal"
+                      />
+                      <label
+                        class="text-neutral-80 fw-medium"
+                        style="top: 8px; left: 8px"
+                        for="checkinInput"
+                        >入住
+                      </label>
+                    </div>
+
+                    <div class="form-floating flex-grow-1 flex-shrink-1">
+                      <input
+                        id="checkoutInput"
+                        readonly
+                        type="date"
+                        class="form-control p-4 pt-9 text-neutral-100 fw-medium border-neutral-100 rounded-3"
+                        style="min-height: 74px"
+                        placeholder="yyyy-mm-dd"
+                        v-model="tempEditBookingDate.date.end"
+                        @click="openModal"
+                      />
+                      <label
+                        class="text-neutral-80 fw-medium"
+                        style="top: 8px; left: 8px"
+                        for="checkoutInput"
+                        >退房
+                      </label>
+                    </div>
+                  </div>
+                </template>
                 <div
                   class="d-flex justify-content-between align-items-center text-neutral-100"
                 >
@@ -510,6 +580,11 @@ const handleEditBooking = () => {
                   </ul>
                 </section>
               </div>
+              <RoomDatePickerModal
+                ref="datePickerModal"
+                :date-time="tempEditBookingDate"
+                @handle-date-change="handleDateChange"
+              />
             </section>
           </div>
 
