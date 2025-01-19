@@ -196,6 +196,11 @@ const handleDateChange = (bookingInfo) => {
   tempEditBookingDate.value.date.start = start;
   tempEditBookingDate.value.date.end = end;
 };
+const tempEditBookingNum = ref(storedBookingInfo.bookingNum);
+const handleEditBookingNum = () => {
+  isEdit.value.bookingNum = false;
+  bookingInfo.value.bookingNum = tempEditBookingNum.value;
+};
 </script>
 
 <template>
@@ -344,8 +349,59 @@ const handleDateChange = (bookingInfo) => {
                   <button
                     class="bg-transparent border-0 fw-bold text-decoration-underline"
                     type="button"
+                    @click="isEdit.bookingNum = !isEdit.bookingNum"
                   >
-                    編輯
+                    {{ !isEdit.bookingNum ? '編輯' : '取消' }}
+                  </button>
+                  <button
+                    class="bg-transparent border-0 fw-bold text-decoration-underline"
+                    type="button"
+                    @click="handleEditBookingNum"
+                    v-if="isEdit.bookingNum"
+                  >
+                    確定
+                  </button>
+                </div>
+                <div
+                  class="d-flex align-items-center gap-4"
+                  v-if="isEdit.bookingNum"
+                >
+                  <button
+                    :class="{
+                      'disabled bg-neutral-40': tempEditBookingNum === 1,
+                    }"
+                    class="btn btn-neutral-0 p-4 border border-neutral-40 rounded-circle"
+                    type="button"
+                    @click="tempEditBookingNum--"
+                  >
+                    <Icon
+                      class="fs-5 text-neutral-100"
+                      icon="ic:baseline-minus"
+                    />
+                  </button>
+
+                  <h6
+                    id="people"
+                    class="d-flex justify-content-center align-items-center fw-bold text-neutral-100"
+                    style="width: 24px"
+                    name="people"
+                  >
+                    {{ tempEditBookingNum }}
+                  </h6>
+
+                  <button
+                    :class="{
+                      'disabled bg-neutral-40':
+                        tempEditBookingNum === room.maxPeople,
+                    }"
+                    class="btn btn-neutral-0 p-4 border border-neutral-40 rounded-circle"
+                    type="button"
+                    @click="tempEditBookingNum++"
+                  >
+                    <Icon
+                      class="fs-5 text-neutral-100"
+                      icon="ic:baseline-plus"
+                    />
                   </button>
                 </div>
               </div>
