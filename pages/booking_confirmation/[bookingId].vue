@@ -57,15 +57,12 @@ onMounted(async () => {
           <hr class="my-10 my-md-20 opacity-100 text-neutral-40" />
 
           <div class="d-flex flex-column align-items-md-start">
-            <h2 class="mb-6 mb-md-10 text-neutral-0 fs-7 fs-md-5 fw-bold">
-              立即查看您的訂單紀錄
-            </h2>
             <button
               class="btn btn-primary-100 px-md-15 py-4 text-neutral-0 fw-bold border-0 rounded-3"
               type="button"
-              @click="navigateTo('/user/orders')"
+              @click="navigateTo(`/pay/${bookingId}`)"
             >
-              前往我的訂單
+              前往付款
             </button>
           </div>
 

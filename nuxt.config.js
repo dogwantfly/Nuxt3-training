@@ -32,6 +32,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBase: process.env.API_BASE_URL,
+      tappayAppId: process.env.NUXT_PUBLIC_TAPPAY_APP_ID,
+      tappayAppKey: process.env.NUXT_PUBLIC_TAPPAY_APP_KEY
     },
   },
   
