@@ -4,8 +4,14 @@ const route = useRoute();
 const { bookingId } = route.params;
 const { $axios } = useNuxtApp();
 const config = useRuntimeConfig();
-const appId = config.public.tappayAppId;
-const appKey = config.public.tappayAppKey;
+const paymentURL = config.public.PayGateWay;
+const merchantID = config.public.MerchantID;
+const version = config.public.Version;
+
+const paymentForm = ref(null)
+const paymentInfo = ref({})
+
+
 
 const order = ref({
   userInfo: {
@@ -23,111 +29,20 @@ const daysCount = computed(() => {
 });
 useHead({
   title: '信用卡付款',
-  script: [
-    {
-      src: 'https://js.tappaysdk.com/sdk/tpdirect/v5.19.2',
-      type: 'text/javascript',
-      defer: true,
-    },
-  ],
 });
-
-onMounted(async () => {
-  TPDirect.setupSDK(appId, appKey, 'sandbox');
-  try {
-    const response = await $axios.get(`/api/v1/orders/${bookingId}`);
-    order.value = response.data.result;
-  } catch (error) {
-    console.error('Failed to fetch order', error);
-  }
-  const statusTable = {
-    0: '欄位已填好，並且沒有問題',
-    1: '欄位還沒有填寫',
-    2: '欄位有錯誤，此時在 CardView 裡面會用顯示 errorColor',
-    3: '使用者正在輸入中',
-  };
-  const defaultCardViewStyle = {
-    color: 'rgb(0,0,0)',
-    fontSize: '15px',
-    lineHeight: '24px',
-    fontWeight: '300',
-    errorColor: 'red',
-    placeholderColor: '',
-  };
-  const config = {
-    // 此設定會顯示卡號輸入正確後，會顯示前六後四碼信用卡卡號
-    isMaskCreditCardNumber: true,
-    maskCreditCardNumberRange: {
-      beginIndex: 6,
-      endIndex: 11,
-    },
-    isUsedCcv: true
-  };
-  TPDirect.card.setup('#tappay-iframe', defaultCardViewStyle, config);
-  TPDirect.card.onUpdate(function (update) {
-    const submitButton = document.querySelector('#submit');
-    const cardViewContainer = document.querySelector('#tappay-iframe');
-
-    if (update.canGetPrime) {
-      submitButton.removeAttribute('disabled');
-    } else {
-      submitButton.setAttribute('disabled', true);
-    }
-
-    var message = document.querySelector('#message');
-
-    message.innerHTML = `
-                canGetPrime: ${update.canGetPrime} \n
-                cardNumberStatus: ${statusTable[update.status.number]} \n
-                cardExpiryStatus: ${statusTable[update.status.expiry]} \n
-                ccvStatus: ${statusTable[update.status.ccv]}
-            `.replace(/    /g, '');
-
-    if (update.hasError) {
-      message.classList.add('error');
-      message.classList.remove('info');
-    } else {
-      message.classList.remove('error');
-      message.classList.add('info');
-    }
-  });
-
-});
-
-const getPrimeResult = ref();
-async function sendPayment() {
-   TPDirect.card.getPrime(async function (result) {
-      getPrimeResult.value = result;
-      const payload = {
-        prime: `${result.card.prime}`,
-        amount: "1",
-        details: "Some item",
-        cardholder: {
-          phone_number: "+886923456789",
-          name: "王小明",
-          email: "LittleMing@Wang.com",
-          zip_code: "100",
-          address: "台北市天龍區芝麻街1號1樓",
-          national_id: "A123456789"
-        }
-      }
-      try {
-
-        const data = await $fetch('/api/payment', {
-          method: 'POST',
-          body: payload
-        })
-
-        if (data.status === 0) {
-          navigateTo('/pay/success');
-        }
-
-      } catch (error) {
-        console.error('付款 API 發生錯誤：', error)
-      }
-
-    });
+  
+const response = await $axios.get(`/api/v1/orders/${bookingId}`);
+order.value = response.data.result;
+if (order.value && order.value.paymentInfo) {
+  paymentInfo.value = order.value.paymentInfo
 }
+
+onMounted(() => {
+  if (paymentForm.value) {
+    paymentForm.value.submit()
+  }
+})
+
 </script>
 
 <template>
@@ -149,33 +64,14 @@ async function sendPayment() {
 
           <hr class="my-10 my-md-20 opacity-100 text-neutral-40" />
           <section class="text-neutral-0">
-            <form class="mb-4">
-              <div class="field">
-                <label class="form-label fs-8 fs-md-7 fw-bold">信用卡</label>
-                <div id="tappay-iframe"></div>
-              </div>
+            <p>正在導向付款頁面，請稍候...</p>
+
+            <form ref="paymentForm" :action="paymentURL" method="post">
+              <input type="hidden" name="MerchantID" :value="merchantID" />
+              <input type="hidden" name="TradeInfo" :value="paymentInfo.aesEncrypt" />
+              <input type="hidden" name="TradeSha" :value="paymentInfo.shaEncrypt" />
+              <input type="hidden" name="Version" :value="version" />
             </form>
-            <button class="btn btn-primary-100 px-md-15 py-4 text-neutral-0 fw-bold border-0 rounded-3"
-              type="button" id="submit" @click="sendPayment">
-              確定付款
-            </button>
-          
-            <br />
-            <pre
-              class="ui error message"
-              id="message"
-              style="overflow-x: auto"
-            ></pre>
-            <pre
-              class="ui info message"
-              id="result"
-              style="overflow-x: auto"
-            ></pre>
-            <pre
-              class="ui info message"
-              id="curl"
-              style="overflow-x: auto"
-            ></pre>
           </section>
 
           <hr class="my-10 my-md-20 opacity-100 text-neutral-40" />

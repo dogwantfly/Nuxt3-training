@@ -33,8 +33,10 @@ export default defineNuxtConfig({
     public: {
       apiBase: process.env.API_BASE_URL,
       tappayAppId: process.env.NUXT_PUBLIC_TAPPAY_APP_ID,
-      tappayAppKey: process.env.NUXT_PUBLIC_TAPPAY_APP_KEY
-    },
+      tappayAppKey: process.env.NUXT_PUBLIC_TAPPAY_APP_KEY,
+      PayGateWay: process.env.PayGateWay,
+      MerchantID: process.env.MerchantID,
+      Version: process.env.Version
+    }
   },
-  
 });
