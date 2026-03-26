@@ -2,6 +2,8 @@
 import { useAuthStore } from '~/stores/auth';
 import { useToggle } from '@vueuse/core';
 
+const config = useRuntimeConfig();
+
 definePageMeta({
   layout: 'account',
 });
@@ -23,8 +25,25 @@ const resetPasswordModal = ref(null);
 onMounted(() => {
   if (authStore.isAuthenticated) {
     navigateTo('/');
+    return;
+  }
+  
+  // Initialize Google Sign-In
+  if (window.google && config.public.googleClientId) {
+    window.google.accounts.id.initialize({
+      client_id: config.public.googleClientId,
+      callback: handleGoogleCredential,
+    });
+    window.google.accounts.id.renderButton(
+      document.getElementById('google-signin-btn'),
+      { theme: 'outline', size: 'large', width: '100%', text: 'continue_with' }
+    );
   }
 });
+
+const handleGoogleCredential = async (response) => {
+  await authStore.googleLogin(response.credential);
+};
 
 const [isModalOpen, toggleModal] = useToggle(false);
 const handleForgotPassword = () => {
@@ -166,6 +185,14 @@ const handleResetPassword = async () => {
         <span>前往註冊</span>
       </NuxtLink>
     </p>
+
+    <div class="my-4 d-flex align-items-center gap-3">
+      <hr class="flex-grow-1 border-neutral-40">
+      <span class="text-neutral-60 fs-8">或</span>
+      <hr class="flex-grow-1 border-neutral-40">
+    </div>
+
+    <div id="google-signin-btn" class="w-100"></div>
 
 
   

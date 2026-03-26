@@ -1,28 +1,36 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-const instance = axios.create({
-  baseURL: 'https://nuxt3-hotel-freyja.onrender.com',
-});
+let _instance = null;
 
-instance.interceptors.request.use((config) => {
-  const token = useCookie('auth_token').value;
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+function getInstance() {
+  if (!_instance) {
+    const config = useRuntimeConfig();
+    _instance = axios.create({
+      baseURL: config.public.apiBase,
+    });
 
-instance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      useCookie('auth_token').value = null;
-      navigateTo('/login');
-    }
-    return Promise.reject(error);
+    _instance.interceptors.request.use((config) => {
+      const token = useCookie('auth_token').value;
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    });
+
+    _instance.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response?.status === 401) {
+          useCookie('auth_token').value = null;
+          navigateTo('/login');
+        }
+        return Promise.reject(error);
+      }
+    );
   }
-);
+  return _instance;
+}
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -48,7 +56,7 @@ export const useAuthStore = defineStore('auth', {
     },
     async getUser() {
       try {
-        const response = await instance.get('/api/v1/user');
+        const response = await getInstance().get('/api/v1/user');
         this.user = response.data.result;
       } catch (error) {
         return `取得使用者資料失敗 ${error}`;
@@ -57,7 +65,7 @@ export const useAuthStore = defineStore('auth', {
     async login(data) {
       try {
         const { email, password } = data;
-        const response = await instance.post('/api/v1/user/login', {
+        const response = await getInstance().post('/api/v1/user/login', {
           email,
           password,
         });
@@ -72,7 +80,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         const { name, email, password, phone, birthday, address } = data;
         const format_birthday = `${birthday.year}/${birthday.month}/${birthday.day}`;
-        const response = await instance.post('/api/v1/user/signup', {
+        const response = await getInstance().post('/api/v1/user/signup', {
           name,
           email,
           password,
@@ -91,7 +99,7 @@ export const useAuthStore = defineStore('auth', {
     },
     async checkToken() {
       try {
-        const response = await instance.get('/api/v1/user/check');
+        const response = await getInstance().get('/api/v1/user/check');
         if (response.status) {
           this.setToken(response.data.token);
         }
@@ -104,6 +112,18 @@ export const useAuthStore = defineStore('auth', {
       const tokenCookie = useCookie('auth_token');
       if (tokenCookie.value) {
         this.token = tokenCookie.value;
+      }
+    },
+    async googleLogin(credential) {
+      try {
+        const response = await getInstance().post('/api/v1/user/google', { credential });
+        const token = response.data.token;
+        this.setToken(token);
+        await this.getUser();
+        console.log(this.user);
+        navigateTo('/');
+      } catch (error) {
+        return `Google 登入失敗 ${error}`;
       }
     },
     logout() {

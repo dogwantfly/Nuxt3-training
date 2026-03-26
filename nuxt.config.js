@@ -3,11 +3,23 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['nuxt-swiper', '@samk-dev/nuxt-vcalendar', '@vueuse/nuxt'],
   plugins: ['~/plugins/axios.js'],
+  app: {
+    head: {
+      script: [
+        { src: 'https://accounts.google.com/gsi/client', async: true, defer: true }
+      ]
+    }
+  },
   compatibilityDate: '2024-11-27',
   css: [
     '@/assets/style/all.scss', 
   ],
   vite: {
+    vue: {
+      template: {
+        transformAssetUrls: false,
+      },
+    },
     css: {
       preprocessorOptions: {
         scss: {
@@ -36,7 +48,8 @@ export default defineNuxtConfig({
       tappayAppKey: process.env.NUXT_PUBLIC_TAPPAY_APP_KEY,
       PayGateWay: process.env.PayGateWay,
       MerchantID: process.env.MerchantID,
-      Version: process.env.Version
+      Version: process.env.Version,
+      googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID
     }
   },
 });
