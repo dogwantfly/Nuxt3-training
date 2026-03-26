@@ -77,10 +77,10 @@ const culinary = response_culinary.result;
       >
         <swiper-slide v-for="(num, index) in 5" :key="index">
           <picture>
-            <source srcset="/images/home-hero.png" media="(min-width:576px)" />
+            <source :srcset="'/images/home-hero.png'" media="(min-width:576px)" />
             <img
               class="hero-img"
-              src="/images/home-hero-sm.png"
+              :src="'/images/home-hero-sm.png'"
               alt="hero banner"
             />
           </picture>
@@ -215,12 +215,12 @@ const culinary = response_culinary.result;
             <swiper-slide v-for="(num, index) in slides" :key="index" class="swiper-slide">
               <picture>
                 <source
-                  srcset="/images/home-room-1.png"
+                  :srcset="'/images/home-room-1.png'"
                   media="(min-width:768px)"
                 />
                 <img
                   class="w-100"
-                  src="/images/home-room-sm-1.png"
+                  :src="'/images/home-room-sm-1.png'"
                   alt="room-a"
                 />
               </picture>
@@ -325,12 +325,12 @@ const culinary = response_culinary.result;
             <p class="text-neutral-40 fw-bold">台灣高雄市新興區六角路123號</p>
             <picture>
               <source
-                srcset="/images/home-map.png"
+                :srcset="'/images/home-map.png'"
                 media="(min-width: 576px)"
               />
               <img
                 class="w-100"
-                src="/images/home-map-sm.png"
+                :src="'/images/home-map-sm.png'"
                 alt="描述地圖中酒店所在的位置"
               />
             </picture>
@@ -369,12 +369,12 @@ const culinary = response_culinary.result;
       </div>
       <picture>
         <source
-          srcset="/images/deco-line-group-horizontal-full.svg"
+          :srcset="'/images/deco-line-group-horizontal-full.svg'"
           media="(min-width:576px)"
         />
         <img
           class="w-100"
-          src="/images/deco-line-group-horizontal-sm.svg"
+          :src="'/images/deco-line-group-horizontal-sm.svg'"
           alt="deco-line-group"
         />
       </picture>
