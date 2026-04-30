@@ -7,6 +7,8 @@ definePageMeta({
 const { $axios, $bootstrap, $showToast } = useNuxtApp();
 const orders = ref([]);
 const comingSoonOrders = ref([]);
+const paymentStatus = ref(null);
+
 const getOrders = async () => {
   const res = await $axios.get('/api/v1/orders');
   orders.value = res.data.result.sort((a, b) =>
@@ -21,15 +23,24 @@ const getOrders = async () => {
 onMounted(async () => {
   await getOrders();
   $bootstrap.Modal(document.getElementById('cancelModal'));
+  if (comingSoonOrders.value[0]) {
+    try {
+      const res = await $axios.get(`/api/v1/orders/${comingSoonOrders.value[0]._id}/payment-status`);
+      paymentStatus.value = res.data;
+    } catch {
+      // silently suppress — no toast
+    }
+  }
 });
+
 const handleDeleteOrder = async (id) => {
   try {
-    const res = await $axios.delete(`/api/v1/orders/${id}`);
+    await $axios.post(`/api/v1/orders/${id}/cancel`);
     await getOrders();
-    $showToast('刪除訂單成功', { variant: 'success' });
+    $showToast('取消訂單成功', { variant: 'success' });
   } catch (error) {
     console.error(error);
-    $showToast('刪除訂單失敗', { variant: 'danger' });
+    $showToast(error?.response?.data?.error || '取消訂單失敗', { variant: 'danger' });
   }
 };
 </script>
@@ -156,6 +167,18 @@ const handleDeleteOrder = async (id) => {
               </li>
             </ul>
           </section>
+
+          <div v-if="paymentStatus" class="d-flex align-items-center gap-2">
+            <span
+              :class="paymentStatus.Status === 'SUCCESS' ? 'text-success' : 'text-danger'"
+              class="fw-bold fs-8"
+            >
+              {{ paymentStatus.Status === 'SUCCESS' ? '付款成功' : '付款失敗' }}
+            </span>
+            <span v-if="paymentStatus.Result?.PaymentType" class="text-neutral-80 fs-8">
+              {{ paymentStatus.Result.PaymentType }}
+            </span>
+          </div>
 
           <div class="d-flex gap-4">
             <button
