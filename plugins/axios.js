@@ -1,8 +1,10 @@
 import axios from 'axios';
 
 export default defineNuxtPlugin((nuxtApp) => {
+  const config = useRuntimeConfig();
+
   const instance = axios.create({
-    baseURL: process.env.NUXT_API_BASE_URL,
+    baseURL: config.public.apiBase,
   });
 
   // 添加請求攔截器，將 Token 自動添加到每個請求
